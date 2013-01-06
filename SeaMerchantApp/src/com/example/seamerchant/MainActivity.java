@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.bitmap.BitmapTexture;
@@ -20,7 +23,10 @@ import org.andengine.util.debug.Debug;
 public class MainActivity extends SimpleBaseGameActivity {
 	private static int CAMERA_WIDTH = 800;
 	private static int CAMERA_HEIGHT = 480;
+	private TextureRegion mSplashTextureRegion;
 	private TextureRegion mBackgroundTextureRegion;
+	
+	private Scene mMainScene;
 	
 	@Override
 	public EngineOptions onCreateEngineOptions() {
@@ -33,12 +39,37 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 	@Override
 	protected void onCreateResources() {
-	    // 1 - Set up bitmap textures
+		loadSplashSceneResources();
+	}
+
+	@Override
+	protected Scene onCreateScene() {
+		final Scene splashScene = initSplashScene();
+		
+		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				loadResources();
+				loadScenes();
+				splashScene.detachSelf();
+				mEngine.setScene(mMainScene);
+				mSplashTextureRegion.getTexture().unload();
+			}
+		}));
+		
+		return splashScene;
+	}
+
+	public void loadResources() 
+	{
+		// 1 - Set up bitmap textures
 	    try {
 			ITexture backgroundTexture = new BitmapTexture(this.getTextureManager(), new IInputStreamOpener() {
 			    @Override
 			    public InputStream open() throws IOException {
-			        return getAssets().open("gfx/welcome.png");
+			        return getAssets().open("gfx/choice.png");
 			    }
 			});
 			
@@ -50,12 +81,38 @@ public class MainActivity extends SimpleBaseGameActivity {
 		}
 	}
 
-	@Override
-	protected Scene onCreateScene() {
-		final Scene scene = new Scene();
-		Sprite backgroundSprite = new Sprite(0, 0, mBackgroundTextureRegion, getVertexBufferObjectManager());
-		scene.attachChild(backgroundSprite);
-		return scene;
+	private void loadScenes()
+	{
+	    // load your game here, you scenes
+		mMainScene = new Scene();
+	    final Sprite backgroundSprite = new Sprite(0, 0, mBackgroundTextureRegion, getVertexBufferObjectManager());
+		mMainScene.attachChild(backgroundSprite);
+	}
+	
+	private void loadSplashSceneResources()
+	{
+		// 1 - Set up bitmap textures
+	    try {
+			ITexture backgroundTexture = new BitmapTexture(this.getTextureManager(), new IInputStreamOpener() {
+			    @Override
+			    public InputStream open() throws IOException {
+			        return getAssets().open("gfx/welcome.png");
+			    }
+			});
+			
+			backgroundTexture.load();
+			
+			mSplashTextureRegion = TextureRegionFactory.extractFromTexture(backgroundTexture);
+		} catch (IOException e) {
+			Debug.e(e);
+		}
 	}
 
+	private Scene initSplashScene()
+	{
+	    final Scene scene = new Scene();
+	    final Sprite backgroundSprite = new Sprite(0, 0, mSplashTextureRegion, getVertexBufferObjectManager());
+	    scene.attachChild(backgroundSprite);
+	    return scene;
+	}
 }
