@@ -18,3 +18,10 @@ local.properties
 # Eclipse project files
 .classpath
 .project
+
+# macos additions
+.DS_Store
+
+# windows additions
+
+desktop.ini
