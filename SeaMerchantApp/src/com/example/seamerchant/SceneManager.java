@@ -8,6 +8,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import com.example.seamerchant.scene.Base;
 import com.example.seamerchant.scene.GameStart;
+import com.example.seamerchant.scene.NewDay;
 import com.example.seamerchant.scene.Welcome;
 
 public class SceneManager {
@@ -65,6 +66,9 @@ public class SceneManager {
 		case NEWDAY:
 			startNewDayScene();
 			break;
+		case WEATHER:
+			startWeatherScene();
+			break;
 		case BUY:
 			break;
 		case MAIN:
@@ -75,17 +79,40 @@ public class SceneManager {
 			break;
 		case SELL:
 			break;
-		case WEATHER:
-			break;
 		default:
 			break;
 		}
 	}
 
 
+	private void startWeatherScene() {
+		final Base wr = new NewDay(mBaseActivity);
+		wr.loadResourcesAndScene();
+		mEngine.setScene(wr.getScene());
+		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				setCurrentScene(SceneType.MAIN);
+				wr.detachAndUnload();
+			}
+		}));
+	}
+
 	private void startNewDayScene() {
-		// TODO Auto-generated method stub
-		
+		final Base nd = new NewDay(mBaseActivity);
+		nd.loadResourcesAndScene();
+		mEngine.setScene(nd.getScene());
+		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				setCurrentScene(SceneType.WEATHER);
+				nd.detachAndUnload();
+			}
+		}));
 	}
 
 	protected void startGameScene() {

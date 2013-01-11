@@ -1,9 +1,10 @@
 package com.example.seamerchant.scene;
 
-import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
-public class NewDay extends Base {
+public class NewDay extends Splash {
+
+	private static final String FILE_PATTERN = "gfx/newday_%d.png";
 
 	public NewDay(SimpleBaseGameActivity baseActivity) {
 		super(baseActivity);
@@ -11,21 +12,8 @@ public class NewDay extends Base {
 	}
 
 	@Override
-	protected Scene initScene() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected void unloadResources() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void loadResources() {
-		// TODO Auto-generated method stub
-
+	String getSplashFile() {
+		return String.format(FILE_PATTERN, 1);
 	}
 
 }
