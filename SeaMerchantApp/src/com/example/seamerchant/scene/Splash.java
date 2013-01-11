@@ -25,10 +25,10 @@ abstract public class Splash extends Base {
 	@Override
 	protected Scene initScene()
 	{
-	    final Scene scene = new Scene();
-	    final Sprite backgroundSprite = new Sprite(0, 0, mSplashTextureRegion, getVertexBufferObjectManager());
-	    scene.attachChild(backgroundSprite);
-	    return scene;
+		final Scene scene = new Scene();
+		final Sprite backgroundSprite = new Sprite(0, 0, mSplashTextureRegion, getVertexBufferObjectManager());
+		scene.attachChild(backgroundSprite);
+		return scene;
 	}
 
 	@Override

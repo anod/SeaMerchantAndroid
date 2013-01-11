@@ -8,14 +8,19 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import com.example.seamerchant.scene.Base;
 import com.example.seamerchant.scene.GameStart;
+import com.example.seamerchant.scene.LowerBanner;
 import com.example.seamerchant.scene.NewDay;
+import com.example.seamerchant.scene.Options;
+import com.example.seamerchant.scene.SideBanner;
 import com.example.seamerchant.scene.Welcome;
 
 public class SceneManager {
 
 	private Engine mEngine;
 	private SimpleBaseGameActivity mBaseActivity;
-	private Base mWelcomeGameScene;
+	private Welcome mWelcomeGameScene;
+	protected SideBanner mSideBanner;
+	protected LowerBanner mLowerBanner;
 	private SceneType mCurrentType;
 	
 	public enum SceneType
@@ -24,7 +29,7 @@ public class SceneManager {
 		GAMESTART,
 		NEWDAY,
 		WEATHER,
-		MAIN,
+		OPTIONS,
 		SELL,
 		BUY,
 		PIRATES,
@@ -34,6 +39,9 @@ public class SceneManager {
 	public SceneManager(SimpleBaseGameActivity baseActivity) {
 		mEngine = baseActivity.getEngine();
 		mBaseActivity = baseActivity;
+		mWelcomeGameScene = new Welcome(mBaseActivity);
+		mSideBanner = new SideBanner(mBaseActivity);
+		mLowerBanner = new LowerBanner(mBaseActivity);
 	}
 
 	public Scene getWelcomeScene() {
@@ -69,9 +77,10 @@ public class SceneManager {
 		case WEATHER:
 			startWeatherScene();
 			break;
-		case BUY:
+		case OPTIONS:
+			startOptionsScene();
 			break;
-		case MAIN:
+		case BUY:
 			break;
 		case PIRATERESULT:
 			break;
@@ -85,6 +94,12 @@ public class SceneManager {
 	}
 
 
+	private void startOptionsScene() {
+		final Base op = new Options(mBaseActivity, mSideBanner, mLowerBanner);
+		op.loadResourcesAndScene();
+		mEngine.setScene(op.getScene());
+	}
+
 	private void startWeatherScene() {
 		final Base wr = new NewDay(mBaseActivity);
 		wr.loadResourcesAndScene();
@@ -94,7 +109,7 @@ public class SceneManager {
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				mEngine.unregisterUpdateHandler(pTimerHandler);
-				setCurrentScene(SceneType.MAIN);
+				setCurrentScene(SceneType.OPTIONS);
 				wr.detachAndUnload();
 			}
 		}));
@@ -131,7 +146,6 @@ public class SceneManager {
 	}
 
 	public void loadRecources() {
-		mWelcomeGameScene = new Welcome(mBaseActivity);
 		mWelcomeGameScene.loadResources();
 	}
 

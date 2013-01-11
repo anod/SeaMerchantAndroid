@@ -13,39 +13,29 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.andengine.util.debug.Debug;
 
-public class LowerBanner extends Base {
-	private static final float OFFSET_TOP = 286.0f;
-	private static final float OFFSET_LEFT = 2.0f;
+public class Options extends Main {
+
 	private TextureRegion mBgTextureRegion;
 
-	public LowerBanner(SimpleBaseGameActivity baseActivity) {
-		super(baseActivity);
-		// TODO Auto-generated constructor stub
+	public Options(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner) {
+		super(baseActivity, sideBanner, lowerBanner);
 	}
 
 	@Override
-	protected Scene initScene() {
-	    final Scene scene = new Scene();
-	    final Sprite backgroundSprite = new Sprite(OFFSET_LEFT, OFFSET_TOP, mBgTextureRegion, getVertexBufferObjectManager());
-	    scene.attachChild(backgroundSprite);
-	    return scene;
+	protected Scene initSceneImpl() {
+		final Scene scene = new Scene();
+		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
+		scene.attachChild(backgroundSprite);
+		return scene;
 	}
 
 	@Override
-	protected void unloadResources() {
-
-	}
-
-	@Override
-	public void loadResources() {
-		if (mBgTextureRegion != null) {
-			return;//Do not load twice
-		}
+	protected void loadResourcesImpl() {
 	    try {
 			ITexture backgroundTexture = new BitmapTexture(getTextureManager(), new IInputStreamOpener() {
 			    @Override
 			    public InputStream open() throws IOException {
-			        return getAssets().open("gfx/lowerbg.png");
+			        return getAssets().open("gfx/choice.png");
 			    }
 			});
 			
@@ -55,6 +45,11 @@ public class LowerBanner extends Base {
 		} catch (IOException e) {
 			Debug.e(e);
 		}
+	}
+
+	@Override
+	protected void unloadResources() {
+		mBgTextureRegion.getTexture().unload();
 	}
 
 }

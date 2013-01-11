@@ -1,31 +1,46 @@
 package com.example.seamerchant.scene;
 
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.Background;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
-public class Main extends Base {
-
-	public Main(SimpleBaseGameActivity baseActivity) {
+abstract public class Main extends Base {
+	protected SideBanner mSideBanner;
+	protected LowerBanner mLowerBanner;
+	
+	public Main(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner) {
 		super(baseActivity);
-		// TODO Auto-generated constructor stub
+		mSideBanner = sideBanner; 
+		mLowerBanner = lowerBanner;
 	}
 
 	@Override
 	protected Scene initScene() {
-		// TODO Auto-generated method stub
-		return null;
+
+		final Scene mainScene = new Scene();
+		mainScene.setBackground(new Background(0.0f, 0.7098f, 0.05882f));
+		
+		Scene scene = initSceneImpl();
+		Scene sideScene = mSideBanner.initScene();
+		Scene lowerScene = mLowerBanner.initScene();
+	    scene.setBackgroundEnabled(false);
+	    sideScene.setBackgroundEnabled(false);
+	    lowerScene.setBackgroundEnabled(false);
+
+		mainScene.attachChild(scene);
+		scene.attachChild(sideScene);
+		scene.attachChild(lowerScene);
+		return mainScene;
 	}
 
-	@Override
-	protected void unloadResources() {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void loadResources() {
-		// TODO Auto-generated method stub
-
+		mSideBanner.loadResources();
+		mLowerBanner.loadResources();
+		loadResourcesImpl();
 	}
 
+	abstract protected Scene initSceneImpl();
+	abstract protected void loadResourcesImpl();
 }
