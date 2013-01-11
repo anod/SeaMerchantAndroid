@@ -13,7 +13,6 @@ public class MainActivity extends SimpleBaseGameActivity {
 	private static int CAMERA_WIDTH = 800;
 	private static int CAMERA_HEIGHT = 480;
 	
-	private Scene mMainScene;
 	private SceneManager mSceneManager;
 	
 	@Override

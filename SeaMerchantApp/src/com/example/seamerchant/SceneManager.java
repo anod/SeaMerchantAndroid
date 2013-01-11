@@ -6,15 +6,15 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
-import com.example.seamerchant.scene.GameScene;
-import com.example.seamerchant.scene.GameStartScene;
-import com.example.seamerchant.scene.WelcomeScene;
+import com.example.seamerchant.scene.Base;
+import com.example.seamerchant.scene.GameStart;
+import com.example.seamerchant.scene.Welcome;
 
 public class SceneManager {
 
 	private Engine mEngine;
 	private SimpleBaseGameActivity mBaseActivity;
-	private GameScene mWelcomeGameScene;
+	private Base mWelcomeGameScene;
 	private SceneType mCurrentType;
 	
 	public enum SceneType
@@ -36,7 +36,7 @@ public class SceneManager {
 	}
 
 	public Scene getWelcomeScene() {
-		final GameScene ws = mWelcomeGameScene;
+		final Base ws = mWelcomeGameScene;
 		final Scene scene = ws.loadScene();
 		
 		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
@@ -63,20 +63,48 @@ public class SceneManager {
 			mWelcomeGameScene.detachAndUnload();
 			break;
 		case NEWDAY:
+			startNewDayScene();
+			break;
+		case BUY:
+			break;
+		case MAIN:
+			break;
+		case PIRATERESULT:
+			break;
+		case PIRATES:
+			break;
+		case SELL:
+			break;
+		case WEATHER:
+			break;
+		default:
 			break;
 		}
 	}
 
 
+	private void startNewDayScene() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	protected void startGameScene() {
-		final GameScene gs = new GameStartScene(mBaseActivity);
-		gs.loadResources();
-		gs.loadScene();
+		final Base gs = new GameStart(mBaseActivity);
+		gs.loadResourcesAndScene();
 		mEngine.setScene(gs.getScene());
+		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				setCurrentScene(SceneType.NEWDAY);
+				gs.detachAndUnload();
+			}
+		}));
 	}
 
 	public void loadRecources() {
-		mWelcomeGameScene = new WelcomeScene(mBaseActivity);
+		mWelcomeGameScene = new Welcome(mBaseActivity);
 		mWelcomeGameScene.loadResources();
 	}
 
