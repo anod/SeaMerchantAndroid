@@ -12,6 +12,7 @@ import com.example.seamerchant.scene.LowerBanner;
 import com.example.seamerchant.scene.NewDay;
 import com.example.seamerchant.scene.Options;
 import com.example.seamerchant.scene.SideBanner;
+import com.example.seamerchant.scene.Weather;
 import com.example.seamerchant.scene.Welcome;
 
 public class SceneManager {
@@ -101,7 +102,7 @@ public class SceneManager {
 	}
 
 	private void startWeatherScene() {
-		final Base wr = new NewDay(mBaseActivity);
+		final Base wr = new Weather(mBaseActivity);
 		wr.loadResourcesAndScene();
 		mEngine.setScene(wr.getScene());
 		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {

@@ -5,6 +5,7 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 abstract public class Main extends Base {
+	private static final float OFFSET_LEFT = 16.0f;
 	protected SideBanner mSideBanner;
 	protected LowerBanner mLowerBanner;
 	
@@ -18,9 +19,10 @@ abstract public class Main extends Base {
 	protected Scene initScene() {
 
 		final Scene mainScene = new Scene();
-		mainScene.setBackground(new Background(0.0f, 0.7098f, 0.05882f));
+		mainScene.setBackground(new Background(0.34901960784314f, 0.67058823529412f, 0.05490196078431f));
 		
 		Scene scene = initSceneImpl();
+		scene.setPosition(OFFSET_LEFT, 0);
 		Scene sideScene = mSideBanner.initScene();
 		Scene lowerScene = mLowerBanner.initScene();
 	    scene.setBackgroundEnabled(false);

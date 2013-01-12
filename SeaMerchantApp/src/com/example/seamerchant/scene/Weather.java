@@ -5,7 +5,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 public class Weather extends Splash {
 	
 	
-	private static final String FILE_PATTERN = "gfx/weater_%s.png";
+	private static final String FILE_PATTERN = "gfx/weather_%s.png";
 	private static final String CALM = "calm";
 	private static final String STORM = "storm";
 

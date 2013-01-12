@@ -14,8 +14,8 @@ import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.andengine.util.debug.Debug;
 
 public class LowerBanner extends Base {
-	private static final float OFFSET_TOP = 286.0f;
-	private static final float OFFSET_LEFT = 2.0f;
+	private static final float OFFSET_TOP = 343.0f;
+	private static final float OFFSET_LEFT = 23.0f;
 	private TextureRegion mBgTextureRegion;
 
 	public LowerBanner(SimpleBaseGameActivity baseActivity) {

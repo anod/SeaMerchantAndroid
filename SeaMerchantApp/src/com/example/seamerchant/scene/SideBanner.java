@@ -15,7 +15,7 @@ import org.andengine.util.debug.Debug;
 
 public class SideBanner extends Base {
 
-	private static final float OFFSET_LEFT = 482.0f;
+	private static final float OFFSET_LEFT = 610.0f;
 	private TextureRegion mBgTextureRegion;
 
 	public SideBanner(SimpleBaseGameActivity baseActivity) {
