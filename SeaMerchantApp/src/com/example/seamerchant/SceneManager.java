@@ -3,8 +3,13 @@ package com.example.seamerchant;
 import org.andengine.engine.Engine;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.controller.BaseTouchController;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+
+import android.view.MotionEvent;
 
 import com.example.seamerchant.scene.Base;
 import com.example.seamerchant.scene.GameStart;
@@ -48,7 +53,25 @@ public class SceneManager {
 	public Scene getWelcomeScene() {
 		final Base ws = mWelcomeGameScene;
 		final Scene scene = ws.loadScene();
-		
+		scene.setOnSceneTouchListener(new IOnSceneTouchListener() {
+			
+			@Override
+			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
+					mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
+						
+						@Override
+						public void onTimePassed(TimerHandler pTimerHandler) {
+							mEngine.unregisterUpdateHandler(pTimerHandler);
+							setCurrentScene(SceneType.GAMESTART);
+						}
+					}));
+					return true;
+					}
+				return false;
+			}
+		});
+		/*
 		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
 			
 			@Override
@@ -56,7 +79,7 @@ public class SceneManager {
 				mEngine.unregisterUpdateHandler(pTimerHandler);
 				setCurrentScene(SceneType.GAMESTART);
 			}
-		}));
+		}));*/
 		
 		return scene;
 	}
@@ -105,7 +128,27 @@ public class SceneManager {
 		final Base wr = new Weather(mBaseActivity);
 		wr.loadResourcesAndScene();
 		mEngine.setScene(wr.getScene());
-		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+		Scene curr = wr.getScene();
+		curr.setOnSceneTouchListener(new IOnSceneTouchListener() {
+			
+			@Override
+			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
+					mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
+						
+						@Override
+						public void onTimePassed(TimerHandler pTimerHandler) {
+							mEngine.unregisterUpdateHandler(pTimerHandler);
+							setCurrentScene(SceneType.OPTIONS);
+							wr.detachAndUnload();
+						}
+					}));
+					return true;
+					}
+				return false;
+			}
+		});
+		/*mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
 			
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
@@ -113,14 +156,34 @@ public class SceneManager {
 				setCurrentScene(SceneType.OPTIONS);
 				wr.detachAndUnload();
 			}
-		}));
+		}));*/
 	}
 
 	private void startNewDayScene() {
 		final Base nd = new NewDay(mBaseActivity);
 		nd.loadResourcesAndScene();
 		mEngine.setScene(nd.getScene());
-		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+		Scene curr = nd.getScene();
+		curr.setOnSceneTouchListener(new IOnSceneTouchListener() {
+			
+			@Override
+			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
+					mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
+						
+						@Override
+						public void onTimePassed(TimerHandler pTimerHandler) {
+							mEngine.unregisterUpdateHandler(pTimerHandler);
+							setCurrentScene(SceneType.WEATHER);
+							nd.detachAndUnload();
+						}
+					}));
+					return true;
+					}
+				return false;
+			}
+		});
+		/*mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
 			
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
@@ -128,14 +191,35 @@ public class SceneManager {
 				setCurrentScene(SceneType.WEATHER);
 				nd.detachAndUnload();
 			}
-		}));
+		}));*/
 	}
 
 	protected void startGameScene() {
 		final Base gs = new GameStart(mBaseActivity);
 		gs.loadResourcesAndScene();
 		mEngine.setScene(gs.getScene());
-		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+		Scene curr = gs.getScene();
+		curr.setOnSceneTouchListener(new IOnSceneTouchListener() {
+			
+			@Override
+			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
+					mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
+						
+						@Override
+						public void onTimePassed(TimerHandler pTimerHandler) {
+							mEngine.unregisterUpdateHandler(pTimerHandler);
+							setCurrentScene(SceneType.NEWDAY);
+							gs.detachAndUnload();
+						}
+					}));
+					return true;
+					}
+				return false;
+			}
+		});
+		
+		/*mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
 			
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
@@ -143,11 +227,10 @@ public class SceneManager {
 				setCurrentScene(SceneType.NEWDAY);
 				gs.detachAndUnload();
 			}
-		}));
+		}));*/
 	}
 
 	public void loadRecources() {
 		mWelcomeGameScene.loadResources();
 	}
-
 }
