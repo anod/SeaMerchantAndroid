@@ -20,7 +20,7 @@ abstract public class Splash extends Base {
 
 	protected TextureRegion mSplashTextureRegion;
 
-	abstract String getSplashFile();
+	abstract String getSplashFile(String param);
 	
 	@Override
 	protected Scene initScene()
@@ -39,7 +39,7 @@ abstract public class Splash extends Base {
 			ITexture backgroundTexture = new BitmapTexture(getTextureManager(), new IInputStreamOpener() {
 			    @Override
 			    public InputStream open() throws IOException {
-			        return getAssets().open(getSplashFile());
+			        return getAssets().open(getSplashFile(""));
 			    }
 			});
 			

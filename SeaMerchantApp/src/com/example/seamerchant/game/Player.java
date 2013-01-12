@@ -5,9 +5,9 @@ public class Player {
 	private int location;
 	private int money;
 	private int guard;
-	private Item item1;
-	private Item item2;
-	private Item item3;
+	private Item wheat;
+	private Item olives;
+	private Item bronze;
 	public Player(int ship, int location) {
 		super();
 		this.ship = ship;
@@ -37,23 +37,23 @@ public class Player {
 	public void setGuard(int guard) {
 		this.guard = guard;
 	}
-	public Item getItem1() {
-		return item1;
+	public Item getWheat() {
+		return wheat;
 	}
 	public void setItem1(Item item1) {
-		this.item1 = item1;
+		this.wheat = item1;
 	}
 	public Item getItem2() {
-		return item2;
+		return olives;
 	}
 	public void setItem2(Item item2) {
-		this.item2 = item2;
+		this.olives = item2;
 	}
 	public Item getItem3() {
-		return item3;
+		return bronze;
 	}
 	public void setItem3(Item item3) {
-		this.item3 = item3;
+		this.bronze = item3;
 	}
 	
 	

@@ -11,7 +11,7 @@ public class GameStart extends Splash {
 	}
 
 	@Override
-	String getSplashFile() {
+	String getSplashFile(String param) {
 		return GFX_GAMESTART_PNG;
 	}
 

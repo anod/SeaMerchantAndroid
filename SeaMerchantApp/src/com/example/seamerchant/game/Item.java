@@ -4,6 +4,9 @@ public class Item {
 
 	private int type;
 	private int price;
+	public static final int WHEAT = 1;
+	public static final int OLIVES = 2;
+	public static final int BRONZE = 3;
 	
 	public Item(int type, int price) {
 		super();

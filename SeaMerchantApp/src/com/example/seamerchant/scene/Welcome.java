@@ -10,7 +10,7 @@ public class Welcome extends Splash {
 	}
 
 	@Override
-	String getSplashFile() {
+	String getSplashFile(String param) {
 		return GFX_WELCOME_PNG;
 	}
 

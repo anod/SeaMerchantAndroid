@@ -1,5 +1,7 @@
 package com.example.seamerchant.scene;
 
+import java.util.Calendar;
+
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 public class Weather extends Splash {
@@ -17,7 +19,10 @@ public class Weather extends Splash {
 
 
 	@Override
-	String getSplashFile() {
+	String getSplashFile(String param) {
+		if(param == STORM){
+		return String.format(FILE_PATTERN, STORM);
+		}
 		return String.format(FILE_PATTERN, CALM);
 	}
 

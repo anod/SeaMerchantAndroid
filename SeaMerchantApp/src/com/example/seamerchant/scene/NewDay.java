@@ -5,15 +5,15 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 public class NewDay extends Splash {
 
 	private static final String FILE_PATTERN = "gfx/newday_%d.png";
-
-	public NewDay(SimpleBaseGameActivity baseActivity) {
+	private int daynumber;
+	public NewDay(SimpleBaseGameActivity baseActivity,int day) {
 		super(baseActivity);
-		// TODO Auto-generated constructor stub
+		daynumber = day;
 	}
 
 	@Override
-	String getSplashFile() {
-		return String.format(FILE_PATTERN, 1);
+	String getSplashFile(String param) {
+		return String.format(FILE_PATTERN, daynumber);
 	}
 
 }

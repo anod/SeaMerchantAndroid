@@ -3,12 +3,15 @@ package com.example.seamerchant;
 import org.andengine.engine.Engine;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.controller.BaseTouchController;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
+import android.test.mock.MockApplication;
 import android.view.MotionEvent;
 
 import com.example.seamerchant.scene.Base;
@@ -122,6 +125,7 @@ public class SceneManager {
 		final Base op = new Options(mBaseActivity, mSideBanner, mLowerBanner);
 		op.loadResourcesAndScene();
 		mEngine.setScene(op.getScene());
+		
 	}
 
 	private void startWeatherScene() {
@@ -160,7 +164,7 @@ public class SceneManager {
 	}
 
 	private void startNewDayScene() {
-		final Base nd = new NewDay(mBaseActivity);
+		final Base nd = new NewDay(mBaseActivity,2);
 		nd.loadResourcesAndScene();
 		mEngine.setScene(nd.getScene());
 		Scene curr = nd.getScene();
@@ -233,4 +237,5 @@ public class SceneManager {
 	public void loadRecources() {
 		mWelcomeGameScene.loadResources();
 	}
+
 }
