@@ -57,4 +57,10 @@ public class LowerBanner extends Base {
 		}
 	}
 
+	@Override
+	public int getSelectedItem() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

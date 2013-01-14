@@ -2,6 +2,7 @@ package com.example.seamerchant.scene;
 
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.Scene;
+import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
@@ -13,7 +14,7 @@ public abstract class Base {
 	protected SimpleBaseGameActivity mBaseActivity;
 	protected Engine mEngine;
 	protected Scene mScene;
-
+	
 	public Base(SimpleBaseGameActivity baseActivity) {
 		mBaseActivity = baseActivity;
 		mEngine = mBaseActivity.getEngine();
@@ -22,7 +23,7 @@ public abstract class Base {
 	abstract protected Scene initScene();
 	abstract protected void unloadResources();
 	abstract public void loadResources();
-
+	abstract public int getSelectedItem();
 	public Scene getScene() {
 		return mScene;
 	}
@@ -54,8 +55,11 @@ public abstract class Base {
 	protected TextureManager getTextureManager() {
 		return mEngine.getTextureManager();
 	}
-	
+	protected FontManager getFontManager() {
+		return mEngine.getFontManager();
+	}
 	protected AssetManager getAssets() {
 		return mBaseActivity.getAssets();
 	}
+
 }

@@ -16,4 +16,10 @@ public class NewDay extends Splash {
 		return String.format(FILE_PATTERN, daynumber);
 	}
 
+	@Override
+	public int getSelectedItem() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

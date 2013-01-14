@@ -2,12 +2,17 @@ package com.example.seamerchant.scene;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+
+import android.graphics.Typeface;
 
 abstract public class Main extends Base {
 	private static final float OFFSET_LEFT = 16.0f;
 	protected SideBanner mSideBanner;
 	protected LowerBanner mLowerBanner;
+	
 	
 	public Main(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner) {
 		super(baseActivity);
@@ -38,6 +43,7 @@ abstract public class Main extends Base {
 
 	@Override
 	public void loadResources() {
+
 		mSideBanner.loadResources();
 		mLowerBanner.loadResources();
 		loadResourcesImpl();

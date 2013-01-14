@@ -3,13 +3,10 @@ package com.example.seamerchant.scene;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.andengine.entity.scene.IOnAreaTouchListener;
-import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -36,7 +33,7 @@ public class Options extends Main implements OnClickListener {
 	private ITextureRegion mMenuSellTextureRegion;
 	private ITextureRegion mMenuTravelTextureRegion;
 	private ITextureRegion mMenuRestTextureRegion;
-
+	private int mSelected;
 	public Options(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner) {
 		super(baseActivity, sideBanner, lowerBanner);
 	}
@@ -47,20 +44,36 @@ public class Options extends Main implements OnClickListener {
 		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
 		scene.attachChild(backgroundSprite);
 
-		final ButtonSprite buyMenuItem = new ButtonSprite(313, 85, mMenuBuyTextureRegion, getVertexBufferObjectManager(), this);
+		final ButtonSprite buyMenuItem = new ButtonSprite(313, 85, mMenuBuyTextureRegion, getVertexBufferObjectManager(), new OnClickListener() {
+			
+			@Override
+			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX,
+					float pTouchAreaLocalY) {
+				mSelected = pButtonSprite.getTag();
+				scene.detachChild(pButtonSprite);
+			}
+		});
 		buyMenuItem.setTag(MENU_BUY);
+		scene.registerTouchArea(buyMenuItem);
+		scene.setTouchAreaBindingOnActionDownEnabled(true);
 		scene.attachChild(buyMenuItem);
 
 		final ButtonSprite sellMenuItem = new ButtonSprite(300, 123, mMenuSellTextureRegion, getVertexBufferObjectManager(), this);
 		sellMenuItem.setTag(MENU_SELL);
+		scene.registerTouchArea(sellMenuItem);
+		scene.setTouchAreaBindingOnActionDownEnabled(true);
 		scene.attachChild(sellMenuItem);
 		
 		final ButtonSprite travelMenuItem = new ButtonSprite(297, 159, mMenuTravelTextureRegion, getVertexBufferObjectManager(), this);
 		travelMenuItem.setTag(MENU_TRAVEL);
+		scene.registerTouchArea(travelMenuItem);
+		scene.setTouchAreaBindingOnActionDownEnabled(true);
 		scene.attachChild(travelMenuItem);
 		
-		final ButtonSprite restMenuItem = new ButtonSprite(113, 200, mMenuRestTextureRegion, getVertexBufferObjectManager(), this);
+		final ButtonSprite restMenuItem = new ButtonSprite(113, 200, mMenuRestTextureRegion, getVertexBufferObjectManager(),this);
 		restMenuItem.setTag(MENU_REST);
+		scene.registerTouchArea(restMenuItem);
+		scene.setTouchAreaBindingOnActionDownEnabled(true);
 		scene.attachChild(restMenuItem);
 		
 		return scene;
@@ -68,10 +81,11 @@ public class Options extends Main implements OnClickListener {
 
 	@Override
 	protected void loadResourcesImpl() {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		ITexture backgroundTexture;
 	    try {
-			ITexture backgroundTexture = new BitmapTexture(getTextureManager(), new IInputStreamOpener() {
+			backgroundTexture = new BitmapTexture(getTextureManager(), new IInputStreamOpener() {
 			    @Override
 			    public InputStream open() throws IOException {
 			        return getAssets().open("gfx/choice.png");
@@ -85,12 +99,14 @@ public class Options extends Main implements OnClickListener {
 			Debug.e(e);
 		}
 	    
+	    
 		mMenuTexture = new BitmapTextureAtlas(this.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
 		mMenuBuyTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "choice_buy_sel.png", 0, 0);
 		mMenuSellTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "choice_sell_nor.png", 0, 30);
 		mMenuTravelTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "choice_travel_nor.png", 0, 60);
 		mMenuRestTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "choice_rest_nor.png", 0, 90);
 
+		mBgTextureRegion.getTexture().load();
 		mMenuTexture.load();
 
 	}
@@ -100,9 +116,10 @@ public class Options extends Main implements OnClickListener {
 		mBgTextureRegion.getTexture().unload();
 	}
 
-	@Override
+@Override
 	public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		int tag = pButtonSprite.getTag();
+		mSelected = tag;
 		if (tag == MENU_BUY) {
 			Log.d("Options", "MENU_BUY pressed");
 		} else if (tag == MENU_SELL) {
@@ -112,8 +129,15 @@ public class Options extends Main implements OnClickListener {
 		} else if (tag == MENU_REST) {
 			Log.d("Options", "MENU_REST pressed");
 		}
+		pButtonSprite.detachSelf();
 
 	}
+
+	@Override
+	public int getSelectedItem() {
+		return mSelected;
+	}
+
 
 	
 }

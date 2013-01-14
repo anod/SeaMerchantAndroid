@@ -26,4 +26,11 @@ public class Weather extends Splash {
 		return String.format(FILE_PATTERN, CALM);
 	}
 
+
+	@Override
+	public int getSelectedItem() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

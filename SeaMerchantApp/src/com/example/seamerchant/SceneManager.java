@@ -1,6 +1,7 @@
 package com.example.seamerchant;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.IOnAreaTouchListener;
@@ -15,6 +16,7 @@ import android.test.mock.MockApplication;
 import android.view.MotionEvent;
 
 import com.example.seamerchant.scene.Base;
+import com.example.seamerchant.scene.EndDay;
 import com.example.seamerchant.scene.GameStart;
 import com.example.seamerchant.scene.LowerBanner;
 import com.example.seamerchant.scene.NewDay;
@@ -31,7 +33,7 @@ public class SceneManager {
 	protected SideBanner mSideBanner;
 	protected LowerBanner mLowerBanner;
 	private SceneType mCurrentType;
-	
+	private int mCurrentDay =1;
 	public enum SceneType
 	{
 		WELCOME,
@@ -42,7 +44,8 @@ public class SceneManager {
 		SELL,
 		BUY,
 		PIRATES,
-		PIRATERESULT
+		PIRATERESULT,
+		NEXTDAY
 	}
 
 	public SceneManager(SimpleBaseGameActivity baseActivity) {
@@ -61,14 +64,7 @@ public class SceneManager {
 			@Override
 			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
-					mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
-						
-						@Override
-						public void onTimePassed(TimerHandler pTimerHandler) {
-							mEngine.unregisterUpdateHandler(pTimerHandler);
-							setCurrentScene(SceneType.GAMESTART);
-						}
-					}));
+					setCurrentScene(SceneType.GAMESTART);
 					return true;
 					}
 				return false;
@@ -115,17 +111,42 @@ public class SceneManager {
 			break;
 		case SELL:
 			break;
+		case NEXTDAY:
+			startNextDayScene();
+			break;
 		default:
 			break;
 		}
 	}
 
 
+	private void startNextDayScene() {
+		final Base ed = new EndDay(mBaseActivity);
+		ed.loadResourcesAndScene();
+		mEngine.setScene(ed.getScene());
+		Scene curr = ed.getScene();
+		curr.setOnSceneTouchListener(new IOnSceneTouchListener() {
+			
+			@Override
+			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
+					mCurrentDay++;
+					setCurrentScene(SceneType.NEWDAY);
+					ed.detachAndUnload();
+					return true;
+					}
+				return false;
+			}
+		});
+		
+	}
+
 	private void startOptionsScene() {
 		final Base op = new Options(mBaseActivity, mSideBanner, mLowerBanner);
 		op.loadResourcesAndScene();
 		mEngine.setScene(op.getScene());
-		
+		Scene curr = op.getScene();
+		int b = op.getSelectedItem();
 	}
 
 	private void startWeatherScene() {
@@ -138,15 +159,8 @@ public class SceneManager {
 			@Override
 			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
-					mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
-						
-						@Override
-						public void onTimePassed(TimerHandler pTimerHandler) {
-							mEngine.unregisterUpdateHandler(pTimerHandler);
-							setCurrentScene(SceneType.OPTIONS);
-							wr.detachAndUnload();
-						}
-					}));
+					setCurrentScene(SceneType.OPTIONS);
+					wr.detachAndUnload();
 					return true;
 					}
 				return false;
@@ -164,7 +178,7 @@ public class SceneManager {
 	}
 
 	private void startNewDayScene() {
-		final Base nd = new NewDay(mBaseActivity,2);
+		final Base nd = new NewDay(mBaseActivity,mCurrentDay);
 		nd.loadResourcesAndScene();
 		mEngine.setScene(nd.getScene());
 		Scene curr = nd.getScene();
@@ -173,15 +187,8 @@ public class SceneManager {
 			@Override
 			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
-					mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
-						
-						@Override
-						public void onTimePassed(TimerHandler pTimerHandler) {
-							mEngine.unregisterUpdateHandler(pTimerHandler);
-							setCurrentScene(SceneType.WEATHER);
-							nd.detachAndUnload();
-						}
-					}));
+					setCurrentScene(SceneType.WEATHER);
+					nd.detachAndUnload();
 					return true;
 					}
 				return false;
@@ -208,15 +215,8 @@ public class SceneManager {
 			@Override
 			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
-					mEngine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
-						
-						@Override
-						public void onTimePassed(TimerHandler pTimerHandler) {
-							mEngine.unregisterUpdateHandler(pTimerHandler);
-							setCurrentScene(SceneType.NEWDAY);
-							gs.detachAndUnload();
-						}
-					}));
+					setCurrentScene(SceneType.NEWDAY);
+					gs.detachAndUnload();
 					return true;
 					}
 				return false;
@@ -237,5 +237,4 @@ public class SceneManager {
 	public void loadRecources() {
 		mWelcomeGameScene.loadResources();
 	}
-
 }

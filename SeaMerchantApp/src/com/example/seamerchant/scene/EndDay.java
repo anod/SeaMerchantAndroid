@@ -2,16 +2,17 @@ package com.example.seamerchant.scene;
 
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
-public class Welcome extends Splash {
-	private static final String GFX_WELCOME_PNG = "gfx/welcome.png";
+public class EndDay extends Splash {
 
-	public Welcome(SimpleBaseGameActivity baseActivity) {
+	private static final String FILE_PATTERN = "gfx/end_day.png";
+
+	public EndDay(SimpleBaseGameActivity baseActivity) {
 		super(baseActivity);
 	}
 
 	@Override
 	String getSplashFile(String param) {
-		return GFX_WELCOME_PNG;
+		return String.format(FILE_PATTERN);
 	}
 
 	@Override

@@ -15,4 +15,10 @@ public class GameStart extends Splash {
 		return GFX_GAMESTART_PNG;
 	}
 
+	@Override
+	public int getSelectedItem() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
