@@ -7,6 +7,8 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
+import com.example.seamerchant.game.Game;
+
 import android.os.Bundle;
 
 public class MainActivity extends SimpleBaseGameActivity {
@@ -18,7 +20,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState) {
 		super.onCreate(pSavedInstanceState);
-		mSceneManager = new SceneManager(this);
+		mSceneManager = new SceneManager(new Game(), this);
 	}
 
 	@Override
