@@ -20,6 +20,7 @@ import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.andengine.util.debug.Debug;
 
 import android.util.Log;
+import android.widget.Toast;
 
 public class Options extends Main implements OnClickListener {
     protected static final int MENU_BUY = 0;
@@ -34,47 +35,50 @@ public class Options extends Main implements OnClickListener {
 	private ITextureRegion mMenuTravelTextureRegion;
 	private ITextureRegion mMenuRestTextureRegion;
 	private int mSelected;
+	
+	public interface OnOptionClickListener {
+		void onOptionClick(int option);
+	}
+	
+	private OnOptionClickListener mListener;
+	
 	public Options(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner) {
 		super(baseActivity, sideBanner, lowerBanner);
 	}
 
+	public void setOnOptionClickListener(OnOptionClickListener listener) {
+		mListener = listener;
+	}
+	
 	@Override
 	protected Scene initSceneImpl() {
 		final Scene scene = new Scene();
 		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
 		scene.attachChild(backgroundSprite);
 
-		final ButtonSprite buyMenuItem = new ButtonSprite(313, 85, mMenuBuyTextureRegion, getVertexBufferObjectManager(), new OnClickListener() {
-			
-			@Override
-			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX,
-					float pTouchAreaLocalY) {
-				mSelected = pButtonSprite.getTag();
-				scene.detachChild(pButtonSprite);
-			}
-		});
+		final ButtonSprite buyMenuItem = new ButtonSprite(313, 85, mMenuBuyTextureRegion, getVertexBufferObjectManager(), this);
 		buyMenuItem.setTag(MENU_BUY);
 		scene.registerTouchArea(buyMenuItem);
-		scene.setTouchAreaBindingOnActionDownEnabled(true);
 		scene.attachChild(buyMenuItem);
 
 		final ButtonSprite sellMenuItem = new ButtonSprite(300, 123, mMenuSellTextureRegion, getVertexBufferObjectManager(), this);
 		sellMenuItem.setTag(MENU_SELL);
 		scene.registerTouchArea(sellMenuItem);
-		scene.setTouchAreaBindingOnActionDownEnabled(true);
 		scene.attachChild(sellMenuItem);
 		
 		final ButtonSprite travelMenuItem = new ButtonSprite(297, 159, mMenuTravelTextureRegion, getVertexBufferObjectManager(), this);
 		travelMenuItem.setTag(MENU_TRAVEL);
 		scene.registerTouchArea(travelMenuItem);
-		scene.setTouchAreaBindingOnActionDownEnabled(true);
 		scene.attachChild(travelMenuItem);
 		
 		final ButtonSprite restMenuItem = new ButtonSprite(113, 200, mMenuRestTextureRegion, getVertexBufferObjectManager(),this);
 		restMenuItem.setTag(MENU_REST);
+		restMenuItem.setOnClickListener(this);
 		scene.registerTouchArea(restMenuItem);
-		scene.setTouchAreaBindingOnActionDownEnabled(true);
 		scene.attachChild(restMenuItem);
+		
+		scene.setTouchAreaBindingOnActionDownEnabled(true);
+		//scene.setOnAreaTouchListener(this);
 		
 		return scene;
 	}
@@ -116,7 +120,7 @@ public class Options extends Main implements OnClickListener {
 		mBgTextureRegion.getTexture().unload();
 	}
 
-@Override
+	@Override
 	public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		int tag = pButtonSprite.getTag();
 		mSelected = tag;
@@ -128,16 +132,18 @@ public class Options extends Main implements OnClickListener {
 			Log.d("Options", "MENU_TRAVEL pressed");
 		} else if (tag == MENU_REST) {
 			Log.d("Options", "MENU_REST pressed");
+		} else {
+			return;
 		}
-		pButtonSprite.detachSelf();
-
+		if (mListener != null) {
+			mListener.onOptionClick(tag);
+		}
 	}
 
 	@Override
 	public int getSelectedItem() {
 		return mSelected;
 	}
-
 
 	
 }

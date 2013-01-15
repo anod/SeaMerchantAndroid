@@ -2,11 +2,7 @@ package com.example.seamerchant.scene;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
-import org.andengine.opengl.font.Font;
-import org.andengine.opengl.font.FontFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-
-import android.graphics.Typeface;
 
 abstract public class Main extends Base {
 	private static final float OFFSET_LEFT = 16.0f;
@@ -27,6 +23,9 @@ abstract public class Main extends Base {
 		mainScene.setBackground(new Background(0.34901960784314f, 0.67058823529412f, 0.05490196078431f));
 		
 		Scene scene = initSceneImpl();
+		mainScene.setChildScene(scene);
+		//mainScene.registerTouchArea(scene);
+		
 		scene.setPosition(OFFSET_LEFT, 0);
 		Scene sideScene = mSideBanner.initScene();
 		Scene lowerScene = mLowerBanner.initScene();
