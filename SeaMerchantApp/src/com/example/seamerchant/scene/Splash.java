@@ -39,7 +39,7 @@ abstract public class Splash extends Base {
 			ITexture backgroundTexture = new BitmapTexture(getTextureManager(), new IInputStreamOpener() {
 			    @Override
 			    public InputStream open() throws IOException {
-			        return getAssets().open(getSplashFile(""));
+			        return getAssets().open(getSplashFile(null));
 			    }
 			});
 			
