@@ -31,6 +31,10 @@ public class Game {
 		mWeather = new Weather();
 	}
 
+	public Player getPlayer() {
+		return mPlayer;
+	}
+	
 	public int getCurrentWeather() {
 		return mWeather.getCurrentWeather();
 	}

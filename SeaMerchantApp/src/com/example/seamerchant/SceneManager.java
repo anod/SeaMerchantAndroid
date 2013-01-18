@@ -196,12 +196,16 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	}
 
 	@Override
-	public void onOptionClick(int option) {
+	public void onOptionClick(final Options options, int option) {
 		switch (option) {
 		case Options.MENU_REST:
 			setCurrentScene(SceneType.REST);
 			break;
-
+		case Options.MENU_SELL:
+			if (!mGame.getPlayer().hasGoods()) {
+				options.showNoGoodsMessage();
+			}
+			break;
 		default:
 			break;
 		}

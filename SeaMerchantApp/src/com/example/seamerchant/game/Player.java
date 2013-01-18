@@ -8,11 +8,29 @@ public class Player {
 	private Item wheat;
 	private Item olives;
 	private Item bronze;
+
 	public Player(int ship, int location) {
-		super();
 		this.ship = ship;
 		this.location = location;
 	}
+	
+	/**
+	 * check if player has goods to sell
+	 * @return
+	 */
+	public boolean hasGoods() {
+		if (wheat != null && wheat.getCount() > 0) {
+			return true;
+		}
+		if (olives != null && olives.getCount() > 0) {
+			return true;
+		}
+		if (bronze != null && bronze.getCount() > 0) {
+			return true;
+		}
+		return false;
+	}
+	
 	public int getShip() {
 		return ship;
 	}
@@ -40,20 +58,14 @@ public class Player {
 	public Item getWheat() {
 		return wheat;
 	}
-	public void setItem1(Item item1) {
-		this.wheat = item1;
+	public void setOlives(Item olives) {
+		this.olives = olives;
 	}
-	public Item getItem2() {
-		return olives;
-	}
-	public void setItem2(Item item2) {
-		this.olives = item2;
-	}
-	public Item getItem3() {
+	public Item getBronze() {
 		return bronze;
 	}
-	public void setItem3(Item item3) {
-		this.bronze = item3;
+	public void setBronze(Item bronze) {
+		this.bronze = bronze;
 	}
 	
 	

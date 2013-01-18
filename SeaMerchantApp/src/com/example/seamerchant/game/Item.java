@@ -4,6 +4,7 @@ public class Item {
 
 	private int type;
 	private int price;
+	private int count;
 	public static final int WHEAT = 1;
 	public static final int OLIVES = 2;
 	public static final int BRONZE = 3;
@@ -22,5 +23,11 @@ public class Item {
 		return price;
 	}
 	
+	public int getCount() {
+		return count;
+	}
 	
+	public void setCount(int count) {
+		this.count = count;
+	}
 }

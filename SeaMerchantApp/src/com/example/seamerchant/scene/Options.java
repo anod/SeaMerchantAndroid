@@ -1,5 +1,7 @@
 package com.example.seamerchant.scene;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
@@ -7,6 +9,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
@@ -27,10 +30,12 @@ public class Options extends Main implements OnClickListener {
 	private ITiledTextureRegion mMenuSellTextureRegion;
 	private ITiledTextureRegion mMenuTravelTextureRegion;
 	private ITiledTextureRegion mMenuRestTextureRegion;
+	private ITextureRegion mNoGoods;
 	private int mSelected;
+	private Scene mOptionsScene;
 	
 	public interface OnOptionClickListener {
-		void onOptionClick(int option);
+		void onOptionClick(final Options options, int option);
 	}
 	
 	private OnOptionClickListener mListener;
@@ -45,35 +50,34 @@ public class Options extends Main implements OnClickListener {
 	
 	@Override
 	protected Scene initSceneImpl() {
-		final Scene scene = new Scene();
+		mOptionsScene = new Scene();
 		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
-		scene.attachChild(backgroundSprite);
+		mOptionsScene.attachChild(backgroundSprite);
 
 		final ButtonSprite buyMenuItem = new ButtonSprite(313, 85, mMenuBuyTextureRegion, getVertexBufferObjectManager(), this);
 		buyMenuItem.setTag(MENU_BUY);
-		scene.registerTouchArea(buyMenuItem);
-		scene.attachChild(buyMenuItem);
+		mOptionsScene.registerTouchArea(buyMenuItem);
+		mOptionsScene.attachChild(buyMenuItem);
 
 		final ButtonSprite sellMenuItem = new ButtonSprite(300, 123, mMenuSellTextureRegion, getVertexBufferObjectManager(), this);
 		sellMenuItem.setTag(MENU_SELL);
-		scene.registerTouchArea(sellMenuItem);
-		scene.attachChild(sellMenuItem);
+		mOptionsScene.registerTouchArea(sellMenuItem);
+		mOptionsScene.attachChild(sellMenuItem);
 		
 		final ButtonSprite travelMenuItem = new ButtonSprite(297, 159, mMenuTravelTextureRegion, getVertexBufferObjectManager(), this);
 		travelMenuItem.setTag(MENU_TRAVEL);
-		scene.registerTouchArea(travelMenuItem);
-		scene.attachChild(travelMenuItem);
+		mOptionsScene.registerTouchArea(travelMenuItem);
+		mOptionsScene.attachChild(travelMenuItem);
 		
 		final ButtonSprite restMenuItem = new ButtonSprite(113, 200, mMenuRestTextureRegion, getVertexBufferObjectManager(),this);
 		restMenuItem.setTag(MENU_REST);
 		restMenuItem.setOnClickListener(this);
-		scene.registerTouchArea(restMenuItem);
-		scene.attachChild(restMenuItem);
+		mOptionsScene.registerTouchArea(restMenuItem);
+		mOptionsScene.attachChild(restMenuItem);
 		
-		scene.setTouchAreaBindingOnActionDownEnabled(true);
+		mOptionsScene.setTouchAreaBindingOnActionDownEnabled(true);
 		//scene.setOnAreaTouchListener(this);
-		
-		return scene;
+		return mOptionsScene;
 	}
 
 	@Override
@@ -81,12 +85,14 @@ public class Options extends Main implements OnClickListener {
 		mBgTextureRegion = AEUtils.createTextureRegionFromAssets("gfx/choice.png", mBaseActivity);
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		mMenuTexture = new BitmapTextureAtlas(this.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
+		mMenuTexture = new BitmapTextureAtlas(this.getTextureManager(), 1024, 512, TextureOptions.BILINEAR);
 		mMenuBuyTextureRegion    = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_buy.png",    0,   0, 1, 2);
 		mMenuSellTextureRegion   = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_sell.png",   0,  54, 1, 2);
 		mMenuTravelTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_travel.png", 0, 108, 1, 2);
 		mMenuRestTextureRegion   = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_rest.png",   0, 162, 1, 2);
 
+		mNoGoods = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "msg_no_goods.png", 0, 216);
+		
 		mBgTextureRegion.getTexture().load();
 		mMenuTexture.load();
 
@@ -113,9 +119,21 @@ public class Options extends Main implements OnClickListener {
 			return;
 		}
 		if (mListener != null) {
-			mListener.onOptionClick(tag);
+			mListener.onOptionClick(this, tag);
 		}
 	}
+	
+	public void showNoGoodsMessage() {
+		final Sprite noGoods = new Sprite(39, 260, mNoGoods, getVertexBufferObjectManager());
+		mOptionsScene.attachChild(noGoods);
+		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				noGoods.detachSelf();
+			}
+		}));
+	}
+	
 
 	@Override
 	public int getSelectedItem() {

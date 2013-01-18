@@ -14,4 +14,31 @@ public class Location {
 	public Location(int type) {
 		mType = type;
 	}
+
+	public Item getWheat() {
+		return wheat;
+	}
+
+	public void setWheat(Item wheat) {
+		this.wheat = wheat;
+	}
+
+	public Item getOlives() {
+		return olives;
+	}
+
+	public void setOlives(Item olives) {
+		this.olives = olives;
+	}
+
+	public Item getBronze() {
+		return bronze;
+	}
+
+	public void setBronze(Item bronze) {
+		this.bronze = bronze;
+	}
+	
+	
+	
 }
