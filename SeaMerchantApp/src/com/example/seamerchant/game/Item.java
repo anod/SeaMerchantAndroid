@@ -8,6 +8,7 @@ public class Item {
 	public static final int OLIVES = 2;
 	public static final int BRONZE = 3;
 	
+
 	public Item(int type) {
 		this.type = type;
 	}
@@ -24,4 +25,5 @@ public class Item {
 	public void setCount(int count) {
 		this.count = count;
 	}
+
 }

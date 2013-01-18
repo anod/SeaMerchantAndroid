@@ -6,6 +6,8 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
+import android.os.storage.StorageManager;
+
 import com.example.seamerchant.game.Game;
 import com.example.seamerchant.game.Game.OnGameChangeListener;
 import com.example.seamerchant.scene.Base;
@@ -52,9 +54,9 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		mBaseActivity = baseActivity;
 		mWelcomeGameScene = new Welcome(mBaseActivity);
 		mSideBanner = new SideBanner(mBaseActivity);
-		mLowerBanner = new LowerBanner(mBaseActivity);
 		mGame = game;
 		mGame.setGameChangeListener(this);
+		mLowerBanner = new LowerBanner(mBaseActivity,mGame);
 	}
 
 	public Scene getWelcomeScene() {
@@ -161,7 +163,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 	private void startWeatherScene() {
 		final Weather wr = new Weather(mBaseActivity);
-		wr.setWeather(mGame.getCurrentWeather());
+		wr.setWeather(mGame.getCurrentWeather(mGame.StormyWeather),mGame.StormyWeather);
 		wr.loadResourcesAndScene();
 		mEngine.setScene(wr.getScene());
 		wr.setOnActionDown(new OnActionDownListener() {

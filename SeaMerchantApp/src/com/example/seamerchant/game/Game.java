@@ -1,5 +1,7 @@
 package com.example.seamerchant.game;
 
+import java.util.Random;
+
 /**
  * Controls game process, send events about change of the game state
  * @author alex
@@ -7,12 +9,14 @@ package com.example.seamerchant.game;
  */
 public class Game {
 	private static final int LAST_DAY = 7;
-	private int mCurrentDay =1;
+	private int mCurrentDay =0;
 	private Player mPlayer;
-	private Weather mWeather;
 	private Location mLocIsrael;
 	private Location mLocTurkey;
 	private Location mLocEgypt;
+	private Weather mWeather;
+	
+	public int StormyWeather =0;
 
 	private OnGameChangeListener mListener;
 	
@@ -29,16 +33,55 @@ public class Game {
 		mLocTurkey = new Location(Location.TURKEY);
 		mLocEgypt = new Location(Location.EGYPT);
 		mWeather = new Weather();
+		nextDay();
 	}
 
 	public Player getPlayer() {
 		return mPlayer;
 	}
 	
-	public int getCurrentWeather() {
-		return mWeather.getCurrentWeather();
+	public int getCurrentWeather(int locationID) {
+		switch (locationID) {
+		case Location.ISRAEL:
+			return mLocIsrael.getWeather();
+		case Location.EGYPT:
+			return mLocEgypt.getWeather();
+		case Location.TURKEY:
+			return mLocTurkey.getWeather();
+		default:
+			break;
+		}
+		return Weather.CALM;
 	}
-	
+	private void setWeather()
+	{
+		mWeather.makeWeather();
+		mLocIsrael.setWeather(new Weather());
+		mLocEgypt.setWeather(new Weather());
+		mLocTurkey.setWeather(new Weather());
+		if (mWeather.getCurrentWeather() == Weather.STORM) {
+			Random rand = new Random();
+			switch (rand.nextInt(3)) {
+			case 0:
+				mLocIsrael.setWeather(mWeather);
+				StormyWeather = Location.ISRAEL;
+				break;
+			case 1:
+				mLocEgypt.setWeather(mWeather);
+				StormyWeather = Location.EGYPT;
+				break;
+			case 2:
+				mLocTurkey.setWeather(mWeather);
+				StormyWeather = Location.TURKEY;
+				break;
+			default:
+				StormyWeather = 0;
+				break;
+			}
+		}else {
+		StormyWeather = 0;
+		}
+	}
 	public void setGameChangeListener(OnGameChangeListener listener) {
 		mListener = listener;
 	}
@@ -53,10 +96,31 @@ public class Game {
 			return;
 		}
 		mCurrentDay++;
-		mWeather.makeWeather();
+		setWeather();
+		setPrices();
+	}
+
+	private void setPrices() {
+		mLocIsrael.setPrices();
+		mLocEgypt.setPrices();
+		mLocTurkey.setPrices();
 	}
 
 	private void finish() {
 		mListener.onGameFinish();
+	}
+
+	public Location getLocation(int location) {
+		switch (location) {
+		case Location.ISRAEL:
+			return mLocIsrael;
+		case Location.EGYPT:
+			return mLocEgypt;
+		case Location.TURKEY:
+			return mLocTurkey;
+		default:
+			break;
+		}
+		return null;
 	}
 }
