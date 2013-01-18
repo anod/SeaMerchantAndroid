@@ -6,9 +6,7 @@ package com.example.seamerchant.game;
  *
  */
 public class Game {
-	
-	
-	
+	private static final int LAST_DAY = 7;
 	private int mCurrentDay =1;
 	private Player mPlayer;
 	private Weather mWeather;
@@ -20,6 +18,7 @@ public class Game {
 	
 	public interface OnGameChangeListener {
 		void onPiratesAttack();
+		void onGameFinish();
 		//TODO: more
 		
 	}
@@ -45,6 +44,15 @@ public class Game {
 	}
 	
 	public void nextDay() {
+		if (mCurrentDay == LAST_DAY) {
+			finish();
+			return;
+		}
 		mCurrentDay++;
+		mWeather.makeWeather();
+	}
+
+	private void finish() {
+		mListener.onGameFinish();
 	}
 }

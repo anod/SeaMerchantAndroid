@@ -153,8 +153,8 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 	private void startWeatherScene() {
 		final Weather wr = new Weather(mBaseActivity);
-		wr.loadResourcesAndScene();
 		wr.setWeather(mGame.getCurrentWeather());
+		wr.loadResourcesAndScene();
 		mEngine.setScene(wr.getScene());
 		wr.setOnActionDown(new OnActionDownListener() {
 			@Override
@@ -209,6 +209,12 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 	@Override
 	public void onPiratesAttack() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGameFinish() {
 		// TODO Auto-generated method stub
 		
 	}
