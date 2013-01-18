@@ -36,20 +36,20 @@ public class Buy extends Main implements OnClickListener {
 		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
 		mItemsScene.attachChild(backgroundSprite);
 
-		final ButtonSprite buyMenuItem = new ButtonSprite(427, 205, mItemWheatTextureRegion, getVertexBufferObjectManager(), this);
+		final ButtonSprite wheatTextItem = new ButtonSprite(427, 205, mItemWheatTextureRegion, getVertexBufferObjectManager(), this);
 		//buyMenuItem.setTag(MENU_BUY);
-		mItemsScene.registerTouchArea(buyMenuItem);
-		mItemsScene.attachChild(buyMenuItem);
+		mItemsScene.registerTouchArea(wheatTextItem);
+		mItemsScene.attachChild(wheatTextItem);
 
-		final ButtonSprite sellMenuItem = new ButtonSprite(424, 4, mItemBronzeTextureRegion, getVertexBufferObjectManager(), this);
+		final ButtonSprite bronzeTextItem = new ButtonSprite(424, 4, mItemBronzeTextureRegion, getVertexBufferObjectManager(), this);
 		//sellMenuItem.setTag(MENU_SELL);
-		mItemsScene.registerTouchArea(sellMenuItem);
-		mItemsScene.attachChild(sellMenuItem);
+		mItemsScene.registerTouchArea(bronzeTextItem);
+		mItemsScene.attachChild(bronzeTextItem);
 		
-		final ButtonSprite travelMenuItem = new ButtonSprite(18, 4, mItemOlivesTextureRegion, getVertexBufferObjectManager(), this);
+		final ButtonSprite oliveTextItem = new ButtonSprite(18, 4, mItemOlivesTextureRegion, getVertexBufferObjectManager(), this);
 		//travelMenuItem.setTag(MENU_TRAVEL);
-		mItemsScene.registerTouchArea(travelMenuItem);
-		mItemsScene.attachChild(travelMenuItem);
+		mItemsScene.registerTouchArea(oliveTextItem);
+		mItemsScene.attachChild(oliveTextItem);
 		
 		mItemsScene.setTouchAreaBindingOnActionDownEnabled(true);
 		//scene.setOnAreaTouchListener(this);

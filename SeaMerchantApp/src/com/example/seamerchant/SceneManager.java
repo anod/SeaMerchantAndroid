@@ -53,9 +53,9 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		mEngine = baseActivity.getEngine();
 		mBaseActivity = baseActivity;
 		mWelcomeGameScene = new Welcome(mBaseActivity);
-		mSideBanner = new SideBanner(mBaseActivity);
 		mGame = game;
 		mGame.setGameChangeListener(this);
+		mSideBanner = new SideBanner(mBaseActivity,mGame);
 		mLowerBanner = new LowerBanner(mBaseActivity,mGame);
 	}
 

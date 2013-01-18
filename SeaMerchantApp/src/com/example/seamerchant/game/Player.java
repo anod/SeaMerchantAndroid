@@ -15,6 +15,8 @@ public class Player {
 		this.wheat = new Item(Item.WHEAT);
 		this.olives = new Item(Item.OLIVES);
 		this.bronze = new Item(Item.BRONZE);
+		this.money = 5000;
+		this.guard = 0;
 	}
 	
 	/**
@@ -69,6 +71,10 @@ public class Player {
 	}
 	public void setBronze(Item bronze) {
 		this.bronze = bronze;
+	}
+
+	public Item getOlives() {
+		return olives;
 	}
 	
 	

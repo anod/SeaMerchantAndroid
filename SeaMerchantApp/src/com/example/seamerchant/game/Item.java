@@ -11,6 +11,7 @@ public class Item {
 
 	public Item(int type) {
 		this.type = type;
+		count = 0;
 	}
 
 	public int getType() {

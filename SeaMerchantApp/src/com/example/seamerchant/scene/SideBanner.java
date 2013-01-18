@@ -12,14 +12,18 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 
 import com.example.seamerchant.andengine.AEUtils;
+import com.example.seamerchant.game.Game;
 
 public class SideBanner extends Base {
 
 	private static final float OFFSET_LEFT = 610.0f;
 	private TextureRegion mBgTextureRegion;
 	private Font mFont;
-	public SideBanner(SimpleBaseGameActivity baseActivity) {
+	private Game mGame;
+	
+	public SideBanner(SimpleBaseGameActivity baseActivity, Game game) {
 		super(baseActivity);
+		mGame = game;
 	}
 
 	@Override
@@ -28,13 +32,13 @@ public class SideBanner extends Base {
 	    final Sprite backgroundSprite = new Sprite(OFFSET_LEFT, 0, mBgTextureRegion, getVertexBufferObjectManager());
 	    scene.attachChild(backgroundSprite);
 	    
-	    Text Money = new Text(OFFSET_LEFT+50, 300f, this.mFont, "5000", getVertexBufferObjectManager());
+	    Text Money = new Text(OFFSET_LEFT+50, 300f, this.mFont, String.format("%d", mGame.getPlayer().getMoney()), getVertexBufferObjectManager());
 	    scene.attachChild(Money);
-	    Text wheat = new Text(OFFSET_LEFT+30, 222f, this.mFont, "0", getVertexBufferObjectManager());
+	    Text wheat = new Text(OFFSET_LEFT+30, 222f, this.mFont, String.format("%d", mGame.getPlayer().getBronze().getCount()), getVertexBufferObjectManager());
 	    scene.attachChild(wheat);
-	    Text olives = new Text(OFFSET_LEFT+30, 189f, this.mFont, "0", getVertexBufferObjectManager());
+	    Text olives = new Text(OFFSET_LEFT+30, 189f, this.mFont, String.format("%d", mGame.getPlayer().getOlives().getCount()), getVertexBufferObjectManager());
 	    scene.attachChild(olives);
-	    Text bronze = new Text(OFFSET_LEFT+30, 152f, this.mFont, "0", getVertexBufferObjectManager());
+	    Text bronze = new Text(OFFSET_LEFT+30, 152f, this.mFont, String.format("%d", mGame.getPlayer().getWheat().getCount()), getVertexBufferObjectManager());
 	    scene.attachChild(bronze);
 	    return scene;
 	}
