@@ -13,6 +13,8 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.andengine.util.debug.Debug;
 
+import com.example.seamerchant.andengine.AEUtils;
+
 public class LowerBanner extends Base {
 	private static final float OFFSET_TOP = 343.0f;
 	private static final float OFFSET_LEFT = 23.0f;
@@ -41,20 +43,8 @@ public class LowerBanner extends Base {
 		if (mBgTextureRegion != null) {
 			return;//Do not load twice
 		}
-	    try {
-			ITexture backgroundTexture = new BitmapTexture(getTextureManager(), new IInputStreamOpener() {
-			    @Override
-			    public InputStream open() throws IOException {
-			        return getAssets().open("gfx/lowerbg.png");
-			    }
-			});
-			
-			backgroundTexture.load();
-			
-			mBgTextureRegion = TextureRegionFactory.extractFromTexture(backgroundTexture);
-		} catch (IOException e) {
-			Debug.e(e);
-		}
+		
+		mBgTextureRegion = AEUtils.createTextureRegionFromAssets("gfx/lowerbg.png", mBaseActivity);
 	}
 
 	@Override

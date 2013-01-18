@@ -1,25 +1,19 @@
 package com.example.seamerchant.scene;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.bitmap.BitmapTexture;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-import org.andengine.util.adt.io.in.IInputStreamOpener;
-import org.andengine.util.debug.Debug;
 
 import android.util.Log;
+
+import com.example.seamerchant.andengine.AEUtils;
 
 public class Options extends Main implements OnClickListener {
     protected static final int MENU_BUY = 0;
@@ -84,25 +78,9 @@ public class Options extends Main implements OnClickListener {
 
 	@Override
 	protected void loadResourcesImpl() {
+		mBgTextureRegion = AEUtils.createTextureRegionFromAssets("gfx/choice.png", mBaseActivity);
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		ITexture backgroundTexture;
-	    try {
-			backgroundTexture = new BitmapTexture(getTextureManager(), new IInputStreamOpener() {
-			    @Override
-			    public InputStream open() throws IOException {
-			        return getAssets().open("gfx/choice.png");
-			    }
-			});
-			
-			backgroundTexture.load();
-			
-			mBgTextureRegion = TextureRegionFactory.extractFromTexture(backgroundTexture);
-		} catch (IOException e) {
-			Debug.e(e);
-		}
-	    
-	    
 		mMenuTexture = new BitmapTextureAtlas(this.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
 		mMenuBuyTextureRegion    = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_buy.png",    0,   0, 1, 2);
 		mMenuSellTextureRegion   = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_sell.png",   0,  54, 1, 2);

@@ -1,17 +1,11 @@
 package com.example.seamerchant.scene;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.opengl.texture.ITexture;
-import org.andengine.opengl.texture.bitmap.BitmapTexture;
 import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-import org.andengine.util.adt.io.in.IInputStreamOpener;
-import org.andengine.util.debug.Debug;
+
+import com.example.seamerchant.andengine.AEUtils;
 
 abstract public class Splash extends Base {
 	public Splash(SimpleBaseGameActivity baseActivity) {
@@ -34,21 +28,8 @@ abstract public class Splash extends Base {
 	@Override
 	public void loadResources()
 	{
-		// 1 - Set up bitmap textures
-	    try {
-			ITexture backgroundTexture = new BitmapTexture(getTextureManager(), new IInputStreamOpener() {
-			    @Override
-			    public InputStream open() throws IOException {
-			        return getAssets().open(getSplashFile(null));
-			    }
-			});
-			
-			backgroundTexture.load();
-			
-			mSplashTextureRegion = TextureRegionFactory.extractFromTexture(backgroundTexture);
-		} catch (IOException e) {
-			Debug.e(e);
-		}
+		
+		mSplashTextureRegion = AEUtils.createTextureRegionFromAssets(getSplashFile(null), mBaseActivity);
 	}
 
 	@Override
