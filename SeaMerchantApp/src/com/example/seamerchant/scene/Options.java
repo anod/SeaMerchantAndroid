@@ -12,7 +12,7 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.bitmap.BitmapTexture;
-import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
@@ -20,7 +20,6 @@ import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.andengine.util.debug.Debug;
 
 import android.util.Log;
-import android.widget.Toast;
 
 public class Options extends Main implements OnClickListener {
     protected static final int MENU_BUY = 0;
@@ -30,10 +29,10 @@ public class Options extends Main implements OnClickListener {
     
 	private TextureRegion mBgTextureRegion;
 	private BitmapTextureAtlas mMenuTexture;
-	private ITextureRegion mMenuBuyTextureRegion;
-	private ITextureRegion mMenuSellTextureRegion;
-	private ITextureRegion mMenuTravelTextureRegion;
-	private ITextureRegion mMenuRestTextureRegion;
+	private ITiledTextureRegion mMenuBuyTextureRegion;
+	private ITiledTextureRegion mMenuSellTextureRegion;
+	private ITiledTextureRegion mMenuTravelTextureRegion;
+	private ITiledTextureRegion mMenuRestTextureRegion;
 	private int mSelected;
 	
 	public interface OnOptionClickListener {
@@ -105,10 +104,10 @@ public class Options extends Main implements OnClickListener {
 	    
 	    
 		mMenuTexture = new BitmapTextureAtlas(this.getTextureManager(), 512, 256, TextureOptions.BILINEAR);
-		mMenuBuyTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "choice_buy_sel.png", 0, 0);
-		mMenuSellTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "choice_sell_nor.png", 0, 30);
-		mMenuTravelTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "choice_travel_nor.png", 0, 60);
-		mMenuRestTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "choice_rest_nor.png", 0, 90);
+		mMenuBuyTextureRegion    = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_buy.png",    0,   0, 1, 2);
+		mMenuSellTextureRegion   = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_sell.png",   0,  54, 1, 2);
+		mMenuTravelTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_travel.png", 0, 108, 1, 2);
+		mMenuRestTextureRegion   = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_rest.png",   0, 162, 1, 2);
 
 		mBgTextureRegion.getTexture().load();
 		mMenuTexture.load();
