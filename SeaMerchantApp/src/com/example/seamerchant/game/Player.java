@@ -12,6 +12,9 @@ public class Player {
 	public Player(int ship, int location) {
 		this.ship = ship;
 		this.location = location;
+		this.wheat = new Item(Item.WHEAT);
+		this.olives = new Item(Item.OLIVES);
+		this.bronze = new Item(Item.BRONZE);
 	}
 	
 	/**
@@ -19,13 +22,13 @@ public class Player {
 	 * @return
 	 */
 	public boolean hasGoods() {
-		if (wheat != null && wheat.getCount() > 0) {
+		if (wheat.getCount() > 0) {
 			return true;
 		}
-		if (olives != null && olives.getCount() > 0) {
+		if (olives.getCount() > 0) {
 			return true;
 		}
-		if (bronze != null && bronze.getCount() > 0) {
+		if (bronze.getCount() > 0) {
 			return true;
 		}
 		return false;

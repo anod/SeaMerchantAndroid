@@ -101,6 +101,7 @@ public class Options extends Main implements OnClickListener {
 	@Override
 	protected void unloadResources() {
 		mBgTextureRegion.getTexture().unload();
+		mMenuTexture.unload();
 	}
 
 	@Override

@@ -48,6 +48,12 @@ abstract public class Main extends Base {
 		loadResourcesImpl();
 	}
 
+
+	@Override
+	public int getSelectedItem() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	abstract protected Scene initSceneImpl();
 	abstract protected void loadResourcesImpl();
 }

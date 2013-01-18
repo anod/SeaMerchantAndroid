@@ -10,6 +10,7 @@ import com.example.seamerchant.game.Game;
 import com.example.seamerchant.game.Game.OnGameChangeListener;
 import com.example.seamerchant.scene.Base;
 import com.example.seamerchant.scene.Base.OnActionDownListener;
+import com.example.seamerchant.scene.Buy;
 import com.example.seamerchant.scene.EndDay;
 import com.example.seamerchant.scene.GameStart;
 import com.example.seamerchant.scene.LowerBanner;
@@ -95,6 +96,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 			startOptionsScene();
 			break;
 		case BUY:
+			startBuyScene();
 			break;
 		case PIRATERESULT:
 			break;
@@ -113,6 +115,12 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		}
 	}
 
+
+	private void startBuyScene() {
+		final Buy buy = new Buy(mBaseActivity, mSideBanner, mLowerBanner);
+		buy.loadResourcesAndScene();
+		mEngine.setScene(buy.getScene());
+	}
 
 	private void startRestScene() {
 		final Rest rt = new Rest(mBaseActivity, mSideBanner, mLowerBanner);
@@ -200,10 +208,17 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		switch (option) {
 		case Options.MENU_REST:
 			setCurrentScene(SceneType.REST);
+			options.detachAndUnload();
+			break;
+		case Options.MENU_BUY:
+			setCurrentScene(SceneType.BUY);
+			options.detachAndUnload();
 			break;
 		case Options.MENU_SELL:
 			if (!mGame.getPlayer().hasGoods()) {
 				options.showNoGoodsMessage();
+			} else {
+				setCurrentScene(SceneType.SELL);
 			}
 			break;
 		default:
