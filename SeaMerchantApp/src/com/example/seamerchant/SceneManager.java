@@ -9,12 +9,14 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import com.example.seamerchant.game.Game;
 import com.example.seamerchant.game.Game.OnGameChangeListener;
 import com.example.seamerchant.scene.Base;
+import com.example.seamerchant.scene.Base.OnActionDownListener;
 import com.example.seamerchant.scene.EndDay;
 import com.example.seamerchant.scene.GameStart;
 import com.example.seamerchant.scene.LowerBanner;
 import com.example.seamerchant.scene.NewDay;
 import com.example.seamerchant.scene.Options;
 import com.example.seamerchant.scene.Options.OnOptionClickListener;
+import com.example.seamerchant.scene.Rest;
 import com.example.seamerchant.scene.SideBanner;
 import com.example.seamerchant.scene.Weather;
 import com.example.seamerchant.scene.Welcome;
@@ -40,7 +42,8 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		BUY,
 		PIRATES,
 		PIRATERESULT,
-		NEXTDAY
+		NEXTDAY,
+		REST
 	}
 
 	public SceneManager(Game game, SimpleBaseGameActivity baseActivity) {
@@ -102,31 +105,43 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		case NEXTDAY:
 			startNextDayScene();
 			break;
+		case REST:
+			startRestScene();
+			break;
 		default:
 			break;
 		}
 	}
 
 
+	private void startRestScene() {
+		final Rest rt = new Rest(mBaseActivity, mSideBanner, mLowerBanner);
+		rt.loadResourcesAndScene();
+		mEngine.setScene(rt.getScene());
+		rt.setOnActionDown(new OnActionDownListener() {
+			@Override
+			public void onAcionDown(Base base) {
+				mGame.nextDay();
+				setCurrentScene(SceneType.NEWDAY);
+				rt.detachAndUnload();
+			}
+		});
+		
+	}
+
 	private void startNextDayScene() {
 		final Base ed = new EndDay(mBaseActivity);
 		ed.loadResourcesAndScene();
 		mEngine.setScene(ed.getScene());
-		Scene curr = ed.getScene();
-		curr.setOnSceneTouchListener(new IOnSceneTouchListener() {
-			
+		ed.setOnActionDown(new OnActionDownListener() {
 			@Override
-			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
-					mGame.nextDay();
-					setCurrentScene(SceneType.NEWDAY);
-					ed.detachAndUnload();
-					return true;
-					}
-				return false;
+			public void onAcionDown(Base base) {
+				mGame.nextDay();
+				setCurrentScene(SceneType.NEWDAY);
+				ed.detachAndUnload();
 			}
 		});
-		
+
 	}
 
 	private void startOptionsScene() {
@@ -141,17 +156,11 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		wr.loadResourcesAndScene();
 		wr.setWeather(mGame.getCurrentWeather());
 		mEngine.setScene(wr.getScene());
-		Scene curr = wr.getScene();
-		curr.setOnSceneTouchListener(new IOnSceneTouchListener() {
-			
+		wr.setOnActionDown(new OnActionDownListener() {
 			@Override
-			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
-					setCurrentScene(SceneType.OPTIONS);
-					wr.detachAndUnload();
-					return true;
-					}
-				return false;
+			public void onAcionDown(Base base) {
+				setCurrentScene(SceneType.OPTIONS);
+				wr.detachAndUnload();
 			}
 		});
 	}
@@ -160,40 +169,26 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		final Base nd = new NewDay(mBaseActivity,mGame.getCurrentDay());
 		nd.loadResourcesAndScene();
 		mEngine.setScene(nd.getScene());
-		Scene curr = nd.getScene();
-		curr.setOnSceneTouchListener(new IOnSceneTouchListener() {
-			
+		nd.setOnActionDown(new OnActionDownListener() {
 			@Override
-			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
-					setCurrentScene(SceneType.WEATHER);
-					nd.detachAndUnload();
-					return true;
-					}
-				return false;
+			public void onAcionDown(Base base) {
+				setCurrentScene(SceneType.WEATHER);
+				nd.detachAndUnload();
 			}
 		});
-
 	}
 
 	protected void startGameScene() {
 		final Base gs = new GameStart(mBaseActivity);
 		gs.loadResourcesAndScene();
 		mEngine.setScene(gs.getScene());
-		Scene curr = gs.getScene();
-		curr.setOnSceneTouchListener(new IOnSceneTouchListener() {
-			
+		gs.setOnActionDown(new OnActionDownListener() {
 			@Override
-			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
-					setCurrentScene(SceneType.NEWDAY);
-					gs.detachAndUnload();
-					return true;
-					}
-				return false;
+			public void onAcionDown(Base base) {
+				setCurrentScene(SceneType.NEWDAY);
+				gs.detachAndUnload();
 			}
 		});
-
 	}
 
 	public void loadRecources() {
@@ -202,9 +197,14 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 	@Override
 	public void onOptionClick(int option) {
-		//TODO
-		//Change game state
-		//Change scene
+		switch (option) {
+		case Options.MENU_REST:
+			setCurrentScene(SceneType.REST);
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	@Override

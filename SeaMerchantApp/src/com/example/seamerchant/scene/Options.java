@@ -16,10 +16,10 @@ import android.util.Log;
 import com.example.seamerchant.andengine.AEUtils;
 
 public class Options extends Main implements OnClickListener {
-    protected static final int MENU_BUY = 0;
-    protected static final int MENU_SELL = 1;
-    protected static final int MENU_TRAVEL = 2;
-    protected static final int MENU_REST = 3;
+	public static final int MENU_BUY = 0;
+	public static final int MENU_SELL = 1;
+	public static final int MENU_TRAVEL = 2;
+	public static final int MENU_REST = 3;
     
 	private TextureRegion mBgTextureRegion;
 	private BitmapTextureAtlas mMenuTexture;

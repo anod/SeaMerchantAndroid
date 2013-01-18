@@ -1,7 +1,9 @@
 package com.example.seamerchant.scene;
 
 import org.andengine.engine.Engine;
+import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -14,6 +16,10 @@ public abstract class Base {
 	protected SimpleBaseGameActivity mBaseActivity;
 	protected Engine mEngine;
 	protected Scene mScene;
+	
+	public interface OnActionDownListener {
+		void onAcionDown(Base base);
+	}
 	
 	public Base(SimpleBaseGameActivity baseActivity) {
 		mBaseActivity = baseActivity;
@@ -62,4 +68,17 @@ public abstract class Base {
 		return mBaseActivity.getAssets();
 	}
 
+	public void setOnActionDown(final OnActionDownListener listener) {
+		mScene.setOnSceneTouchListener(new IOnSceneTouchListener() {
+			
+			@Override
+			public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+				if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
+					listener.onAcionDown(Base.this);
+					return true;
+				}
+				return false;
+			}
+		});
+	}
 }
