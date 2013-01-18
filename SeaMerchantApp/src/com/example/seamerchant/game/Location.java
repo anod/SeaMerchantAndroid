@@ -59,17 +59,10 @@ public class Location {
 		// TODO will implmant if there would be need
 	}
 	public void setPrices() {
-		Random rand = new Random();
-		// i used nextDouble but maybe nextGauessian would be better (if removing the negative values)
-		int randomPrice = (int)(rand.nextDouble() * PricedItem.bronzeMaxPrice);
-		randomPrice = (randomPrice < PricedItem.bronzeMinPrice) ? PricedItem.bronzeMinPrice : randomPrice;
-		((PricedItem)bronze).setPrice(randomPrice);
-		randomPrice = (int)(rand.nextDouble() * PricedItem.oliveMaxPrice);
-		randomPrice = (randomPrice < PricedItem.oliveMinPrice) ? PricedItem.oliveMinPrice : randomPrice;
-		((PricedItem)olives).setPrice(randomPrice);
-		randomPrice = (int)(rand.nextDouble() * PricedItem.wheatMaxPrice);
-		randomPrice = (randomPrice < PricedItem.wheatMinPrice) ? PricedItem.wheatMinPrice : randomPrice;
-		((PricedItem)wheat).setPrice(randomPrice);
+		 
+		((PricedItem)bronze).setPrice(priceRandomiser(PricedItem.bronzeMaxPrice, PricedItem.bronzeMinPrice, PricedItem.bronzeInc));
+		((PricedItem)olives).setPrice(priceRandomiser(PricedItem.oliveMaxPrice, PricedItem.oliveMinPrice, PricedItem.oliveInc));
+		((PricedItem)wheat).setPrice(priceRandomiser(PricedItem.wheatMaxPrice, PricedItem.wheatMinPrice, PricedItem.wheatInc));
 	}
 	public void makeWeather(){
 		weather.makeWeather();
@@ -81,5 +74,14 @@ public class Location {
 
 	public void setWeather(Weather weather) {
 		this.weather = weather;
+	}
+	private int priceRandomiser(int max,int min,int inc){
+		Random rand = new Random();
+		// i used nextDouble but maybe nextGauessian would be better (if removing the negative values)
+		// i think the calculation is like this random(0 to (max-min)/Inc) *Inc + min 
+		int randomPrice = rand.nextInt((max-min)/inc) * inc + min;
+		if(randomPrice > max)
+			return priceRandomiser(max, min, inc);
+		return randomPrice;
 	}
 }
