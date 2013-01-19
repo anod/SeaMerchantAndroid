@@ -3,6 +3,8 @@ package com.example.seamerchant.andengine;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.bitmap.BitmapTexture;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -10,6 +12,9 @@ import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.andengine.util.debug.Debug;
+
+import android.graphics.Color;
+import android.graphics.Typeface;
 
 public class AEUtils {
 
@@ -37,5 +42,16 @@ public class AEUtils {
 			Debug.e(e);
 		}
 		return region;
+	}
+	
+	public static Font createGameFont(final SimpleBaseGameActivity baseActivity) {
+		return FontFactory.create(
+			baseActivity.getFontManager(), 
+			baseActivity.getTextureManager(), 
+			256, 256, 
+			Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD), 
+			30,
+			Color.WHITE
+		);
 	}
 }

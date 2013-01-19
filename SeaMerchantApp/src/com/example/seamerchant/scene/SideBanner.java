@@ -4,12 +4,8 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.Font;
-import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-
-import android.graphics.Color;
-import android.graphics.Typeface;
 
 import com.example.seamerchant.andengine.AEUtils;
 import com.example.seamerchant.game.Game;
@@ -55,7 +51,7 @@ public class SideBanner extends Base {
 			return;//Do not load twice
 		}
 		mBgTextureRegion = AEUtils.createTextureRegionFromAssets("gfx/sidebg.png", mBaseActivity);
-		mFont = FontFactory.create(this.getFontManager(), this.getTextureManager(), 256, 256, Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD), 30,Color.WHITE);
+		mFont = AEUtils.createGameFont(mBaseActivity);
 	    mFont.load();
 	}
 

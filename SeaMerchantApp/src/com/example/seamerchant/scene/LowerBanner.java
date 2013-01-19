@@ -68,7 +68,7 @@ public class LowerBanner extends Base {
 		}
 		
 		mBgTextureRegion = AEUtils.createTextureRegionFromAssets("gfx/lowerbg.png", mBaseActivity);
-		mFont = FontFactory.create(this.getFontManager(), this.getTextureManager(), 256, 256, Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD), 30,Color.WHITE);
+		mFont = AEUtils.createGameFont(mBaseActivity);
 	    mFont.load();
 	}
 
