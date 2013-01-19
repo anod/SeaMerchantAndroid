@@ -29,7 +29,9 @@ public abstract class Base {
 	abstract protected Scene initScene();
 	abstract protected void unloadResources();
 	abstract public void loadResources();
-	abstract public int getSelectedItem();
+	public int getSelectedItem() {
+		return 0;
+	}
 	public Scene getScene() {
 		return mScene;
 	}
