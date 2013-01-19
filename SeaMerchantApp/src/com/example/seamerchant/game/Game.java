@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class Game {
 	private static final int LAST_DAY = 7;
-	private int mCurrentDay =0;
+	private int mCurrentDay = 1;
 	private Player mPlayer;
 	private Location mLocIsrael;
 	private Location mLocTurkey;
