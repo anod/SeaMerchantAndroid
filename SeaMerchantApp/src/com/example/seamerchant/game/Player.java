@@ -1,6 +1,8 @@
 package com.example.seamerchant.game;
 
 public class Player {
+	private static final int DEFAULT_GUARD = 0;
+	private static final int DEFAULT_MONEY = 5000;
 	private int ship;
 	private int location;
 	private int money;
@@ -15,8 +17,8 @@ public class Player {
 		this.wheat = new Item(Item.WHEAT);
 		this.olives = new Item(Item.OLIVES);
 		this.bronze = new Item(Item.BRONZE);
-		this.money = 5000;
-		this.guard = 0;
+		this.money = DEFAULT_MONEY;
+		this.guard = DEFAULT_GUARD;
 	}
 	
 	/**

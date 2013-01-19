@@ -1,20 +1,12 @@
 package com.example.seamerchant.scene;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
-import org.andengine.opengl.texture.ITexture;
-import org.andengine.opengl.texture.bitmap.BitmapTexture;
 import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-import org.andengine.util.adt.io.in.IInputStreamOpener;
-import org.andengine.util.debug.Debug;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -44,13 +36,13 @@ public class LowerBanner extends Base {
 	    final Scene scene = new Scene();
 	    final Sprite backgroundSprite = new Sprite(OFFSET_LEFT, OFFSET_TOP, mBgTextureRegion, getVertexBufferObjectManager());
 	    scene.attachChild(backgroundSprite);
-	    SetPriceTexts(scene,Item.BRONZE,37);
-	    SetPriceTexts(scene,Item.OLIVES,70);
-	    SetPriceTexts(scene,Item.WHEAT,106);
+	    setPriceTexts(scene,Item.BRONZE,37);
+	    setPriceTexts(scene,Item.OLIVES,70);
+	    setPriceTexts(scene,Item.WHEAT,106);
 	    return scene;
 	}
 
-	private void SetPriceTexts(Scene scene, int type,int offsetTop) {
+	private void setPriceTexts(Scene scene, int type,int offsetTop) {
 		// there must be a better way to do this.
 		// set bronze
 		PricedItem item = (PricedItem)mGame.getLocation(Location.EGYPT).getItem(type);

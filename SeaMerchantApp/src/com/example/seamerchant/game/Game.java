@@ -16,7 +16,7 @@ public class Game {
 	private Location mLocEgypt;
 	private Weather mWeather;
 	
-	public int StormyWeather =0;
+	private int mStormyWeather = 0;
 
 	private OnGameChangeListener mListener;
 	
@@ -33,7 +33,12 @@ public class Game {
 		mLocTurkey = new Location(Location.TURKEY);
 		mLocEgypt = new Location(Location.EGYPT);
 		mWeather = new Weather();
-		nextDay();
+		init();
+	}
+	
+	private void init() {
+		setWeather();
+		setPrices();
 	}
 
 	public Player getPlayer() {
@@ -42,17 +47,21 @@ public class Game {
 	
 	public int getCurrentWeather(int locationID) {
 		switch (locationID) {
-		case Location.ISRAEL:
-			return mLocIsrael.getWeather();
-		case Location.EGYPT:
-			return mLocEgypt.getWeather();
-		case Location.TURKEY:
-			return mLocTurkey.getWeather();
-		default:
-			break;
+			case Location.ISRAEL:
+				return mLocIsrael.getWeather();
+			case Location.EGYPT:
+				return mLocEgypt.getWeather();
+			case Location.TURKEY:
+				return mLocTurkey.getWeather();
+			default:
+				break;
 		}
 		return Weather.CALM;
 	}
+	
+	/**
+	 * TODO: Check what it means.
+	 */
 	private void setWeather()
 	{
 		mWeather.makeWeather();
@@ -64,22 +73,22 @@ public class Game {
 			switch (rand.nextInt(3)) {
 			case 0:
 				mLocIsrael.setWeather(mWeather);
-				StormyWeather = Location.ISRAEL;
+				setStormyWeather(Location.ISRAEL);
 				break;
 			case 1:
 				mLocEgypt.setWeather(mWeather);
-				StormyWeather = Location.EGYPT;
+				setStormyWeather(Location.EGYPT);
 				break;
 			case 2:
 				mLocTurkey.setWeather(mWeather);
-				StormyWeather = Location.TURKEY;
+				setStormyWeather(Location.TURKEY);
 				break;
 			default:
-				StormyWeather = 0;
+				setStormyWeather(0);
 				break;
 			}
 		}else {
-		StormyWeather = 0;
+			setStormyWeather(0);
 		}
 	}
 	public void setGameChangeListener(OnGameChangeListener listener) {
@@ -122,5 +131,13 @@ public class Game {
 			break;
 		}
 		return null;
+	}
+
+	public int getStormyWeather() {
+		return mStormyWeather;
+	}
+
+	public void setStormyWeather(int mStormyWeather) {
+		this.mStormyWeather = mStormyWeather;
 	}
 }

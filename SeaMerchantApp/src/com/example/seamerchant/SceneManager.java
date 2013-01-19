@@ -163,7 +163,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 	private void startWeatherScene() {
 		final Weather wr = new Weather(mBaseActivity);
-		wr.setWeather(mGame.getCurrentWeather(mGame.StormyWeather),mGame.StormyWeather);
+		wr.setWeather(mGame.getCurrentWeather(mGame.getStormyWeather()),mGame.getStormyWeather());
 		wr.loadResourcesAndScene();
 		mEngine.setScene(wr.getScene());
 		wr.setOnActionDown(new OnActionDownListener() {
