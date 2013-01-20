@@ -50,6 +50,10 @@ public abstract class Base {
 		unloadResources();
 	}
 
+	public void detachSelf() {
+		mScene.detachSelf();
+	}
+	
 	public void detachAndUnload() {
 		mScene.detachSelf();
 		unload();

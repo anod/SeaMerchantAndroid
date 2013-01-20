@@ -15,6 +15,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import com.example.seamerchant.andengine.AEUtils;
 
 public class NumKeyboard extends Base implements OnClickListener {
+	private static final int MAX_LENGTH_NUM = 7;
 	private static final int ET = -1;
 	private static final int BS = -2;
 
@@ -32,14 +33,25 @@ public class NumKeyboard extends Base implements OnClickListener {
 	private ITiledTextureRegion mNumpad0TextureRegeion;
 	private ITiledTextureRegion mNumpadETextureRegeion;
 	private ITiledTextureRegion mNumpadBTextureRegeion;
+	private OnNumKeyboardUpdateListener mListener;
+	private StringBuilder mCurrentNumber;
+	
+	public interface OnNumKeyboardUpdateListener {
+		void onNumberUpdate(int num, NumKeyboard kb);
+		void onNumberEnter(int num, NumKeyboard kb);
+		void onNumberEmpty(NumKeyboard kb);
+	}
 
-	public NumKeyboard(SimpleBaseGameActivity baseActivity) {
+	public NumKeyboard(SimpleBaseGameActivity baseActivity, OnNumKeyboardUpdateListener listener) {
 		super(baseActivity);
+		mListener = listener;
+		mCurrentNumber = new StringBuilder();
 	}
 
 	@Override
 	protected Scene initScene() {
 		final HUD scene = new HUD();
+		scene.setCamera(mEngine.getCamera());
 		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
 		scene.attachChild(backgroundSprite);
 
@@ -68,7 +80,7 @@ public class NumKeyboard extends Base implements OnClickListener {
 	}
 	
 	private void addButton(int tag, int x, int y, ITiledTextureRegion texturedRegion, Scene scene) {
-		final ButtonSprite btn = new ButtonSprite(16, 10, mNumpad1TextureRegeion, getVertexBufferObjectManager(), this);
+		final ButtonSprite btn = new ButtonSprite(x, y, texturedRegion, getVertexBufferObjectManager(), this);
 		btn.setTag(tag);
 		scene.registerTouchArea(btn);
 		scene.attachChild(btn);
@@ -76,7 +88,8 @@ public class NumKeyboard extends Base implements OnClickListener {
 
 	@Override
 	protected void unloadResources() {
-		// TODO Auto-generated method stub
+		mBgTextureRegion.getTexture().unload();
+		mNumpadTexture.unload();
 
 	}
 
@@ -108,8 +121,29 @@ public class NumKeyboard extends Base implements OnClickListener {
 
 	@Override
 	public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		// TODO Auto-generated method stub
-		
+		int tag = pButtonSprite.getTag();
+		if (tag == ET) { //ENTER
+			if (mCurrentNumber.length() > 0) {
+				mListener.onNumberEnter(Integer.parseInt(mCurrentNumber.toString()), this);
+				this.detachSelf();
+			}
+			return;
+		}
+		if (tag == BS) { //BACKSPACE
+			if (mCurrentNumber.length() > 0) {
+				mCurrentNumber.deleteCharAt(mCurrentNumber.length() - 1);
+				if (mCurrentNumber.length() > 0) {
+					mListener.onNumberUpdate(Integer.parseInt(mCurrentNumber.toString()), this);
+				} else {
+					mListener.onNumberEmpty(this);
+				}
+			}
+			return;
+		}
+		if (mCurrentNumber.length() < MAX_LENGTH_NUM) {
+			mCurrentNumber.append(tag);
+			mListener.onNumberUpdate(Integer.parseInt(mCurrentNumber.toString()), this);
+		}
 	}
 
 }
