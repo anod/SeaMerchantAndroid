@@ -35,6 +35,8 @@ public class NumKeyboard extends Base implements OnClickListener {
 	private ITiledTextureRegion mNumpadBTextureRegeion;
 	private OnNumKeyboardUpdateListener mListener;
 	private StringBuilder mCurrentNumber;
+	private int mOffsetX;
+	private int mOffsetY;
 	
 	public interface OnNumKeyboardUpdateListener {
 		void onNumberUpdate(int num, NumKeyboard kb);
@@ -42,39 +44,41 @@ public class NumKeyboard extends Base implements OnClickListener {
 		void onNumberEmpty(NumKeyboard kb);
 	}
 
-	public NumKeyboard(SimpleBaseGameActivity baseActivity, OnNumKeyboardUpdateListener listener) {
+	public NumKeyboard(int x, int y, SimpleBaseGameActivity baseActivity, OnNumKeyboardUpdateListener listener) {
 		super(baseActivity);
 		mListener = listener;
 		mCurrentNumber = new StringBuilder();
+		mOffsetX = x;
+		mOffsetY = y;
 	}
 
 	@Override
 	protected Scene initScene() {
 		final HUD scene = new HUD();
 		scene.setCamera(mEngine.getCamera());
-		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
+		final Sprite backgroundSprite = new Sprite(mOffsetX, mOffsetY, mBgTextureRegion, getVertexBufferObjectManager());
 		scene.attachChild(backgroundSprite);
 
 		// 1st column
 		
-		addButton( 1, 16,  10, mNumpad1TextureRegeion, scene);
-		addButton( 4, 16,  75, mNumpad4TextureRegeion, scene);
-		addButton( 7, 16, 142, mNumpad7TextureRegeion, scene);
-		addButton(ET, 16, 206, mNumpadETextureRegeion, scene);
+		addButton( 1, mOffsetX+16, mOffsetY+ 10, mNumpad1TextureRegeion, scene);
+		addButton( 4, mOffsetX+16, mOffsetY+ 75, mNumpad4TextureRegeion, scene);
+		addButton( 7, mOffsetX+16, mOffsetY+142, mNumpad7TextureRegeion, scene);
+		addButton(ET, mOffsetX+16, mOffsetY+206, mNumpadETextureRegeion, scene);
 
 		// 2nd column
 
-		addButton( 2, 88,  10, mNumpad2TextureRegeion, scene);
-		addButton( 5, 88,  75, mNumpad5TextureRegeion, scene);
-		addButton( 8, 88, 142, mNumpad8TextureRegeion, scene);
-		addButton( 0, 88, 206, mNumpad0TextureRegeion, scene);
+		addButton( 2, mOffsetX+88, mOffsetY+ 10, mNumpad2TextureRegeion, scene);
+		addButton( 5, mOffsetX+88, mOffsetY+ 75, mNumpad5TextureRegeion, scene);
+		addButton( 8, mOffsetX+88, mOffsetY+142, mNumpad8TextureRegeion, scene);
+		addButton( 0, mOffsetX+88, mOffsetY+206, mNumpad0TextureRegeion, scene);
 
 		// 3rd column
 		
-		addButton( 3, 163,  10, mNumpad3TextureRegeion, scene);
-		addButton( 6, 163,  75, mNumpad6TextureRegeion, scene);
-		addButton( 9, 163, 142, mNumpad9TextureRegeion, scene);
-		addButton(BS, 163, 206, mNumpadBTextureRegeion, scene);
+		addButton( 3, mOffsetX+163, mOffsetY+ 10, mNumpad3TextureRegeion, scene);
+		addButton( 6, mOffsetX+163, mOffsetY+ 75, mNumpad6TextureRegeion, scene);
+		addButton( 9, mOffsetX+163, mOffsetY+142, mNumpad9TextureRegeion, scene);
+		addButton(BS, mOffsetX+163, mOffsetY+206, mNumpadBTextureRegeion, scene);
 
 		return scene;
 	}

@@ -12,6 +12,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import com.example.seamerchant.andengine.AEUtils;
+import com.example.seamerchant.scene.NumKeyboard.OnNumKeyboardUpdateListener;
 
 public class Buy extends Main implements OnClickListener {
 	private TextureRegion mBgTextureRegion;
@@ -20,13 +21,37 @@ public class Buy extends Main implements OnClickListener {
 	private ITiledTextureRegion mItemBronzeTextureRegion;
 	private ITiledTextureRegion mItemOlivesTextureRegion;
 	private Scene mItemsScene;
+	private NumKeyboard mNumKeyboard;
+	
+	private OnNumKeyboardUpdateListener mNumKeyboardListener = new OnNumKeyboardUpdateListener() {
+		
+		@Override
+		public void onNumberUpdate(int num, NumKeyboard kb) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onNumberEnter(int num, NumKeyboard kb) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void onNumberEmpty(NumKeyboard kb) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
 	
 	public interface OnBuyItemListener {
 		void onBuyItem();
 	}
 	
+	
 	public Buy(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner) {
 		super(baseActivity, sideBanner, lowerBanner);
+		mNumKeyboard = new NumKeyboard(400, 25,baseActivity, mNumKeyboardListener);
 	}
 
 	@Override
@@ -51,7 +76,10 @@ public class Buy extends Main implements OnClickListener {
 		mItemsScene.attachChild(oliveTextItem);
 		
 		mItemsScene.setTouchAreaBindingOnActionDownEnabled(true);
-		//scene.setOnAreaTouchListener(this);
+		
+		mNumKeyboard.loadScene();
+		mItemsScene.setChildScene(mNumKeyboard.getScene());
+		
 		return mItemsScene;
 	}
 
@@ -67,12 +95,14 @@ public class Buy extends Main implements OnClickListener {
 
 		mBgTextureRegion.getTexture().load();
 		mItemTexture.load();
+		mNumKeyboard.loadResources();
 	}
 
 	@Override
 	protected void unloadResources() {
 		mBgTextureRegion.getTexture().unload();
 		mItemTexture.unload();
+		mNumKeyboard.unloadResources();
 	}
 
 	@Override
