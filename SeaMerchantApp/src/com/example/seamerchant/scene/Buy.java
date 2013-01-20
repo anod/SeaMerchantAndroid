@@ -7,40 +7,46 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.debug.Debug;
 
 import com.example.seamerchant.andengine.AEUtils;
 import com.example.seamerchant.scene.NumKeyboard.OnNumKeyboardUpdateListener;
 
 public class Buy extends Main implements OnClickListener {
+	public static final int ITEM_WHEAT = 0;
+	public static final int ITEM_BRONZE = 1;
+	public static final int ITEM_OLIVES = 2;
+
 	private TextureRegion mBgTextureRegion;
 	private BitmapTextureAtlas mItemTexture;
 	private ITiledTextureRegion mItemWheatTextureRegion;
 	private ITiledTextureRegion mItemBronzeTextureRegion;
 	private ITiledTextureRegion mItemOlivesTextureRegion;
+	private ITextureRegion mBuyInputTextureRegion;
 	private Scene mItemsScene;
 	private NumKeyboard mNumKeyboard;
+	private Sprite mBuyInput;
 	
 	private OnNumKeyboardUpdateListener mNumKeyboardListener = new OnNumKeyboardUpdateListener() {
 		
 		@Override
 		public void onNumberUpdate(int num, NumKeyboard kb) {
-			// TODO Auto-generated method stub
-			
+			Debug.d("Update - Num: "+num);
 		}
 		
 		@Override
 		public void onNumberEnter(int num, NumKeyboard kb) {
-			// TODO Auto-generated method stub
-			
+			Debug.d("Enter - Num: "+num);
 		}
 		
 		@Override
 		public void onNumberEmpty(NumKeyboard kb) {
-			// TODO Auto-generated method stub
-			
+			Debug.d("Empty - Num: ");
+
 		}
 	};
 	
@@ -61,24 +67,25 @@ public class Buy extends Main implements OnClickListener {
 		mItemsScene.attachChild(backgroundSprite);
 
 		final ButtonSprite wheatTextItem = new ButtonSprite(427, 205, mItemWheatTextureRegion, getVertexBufferObjectManager(), this);
-		//buyMenuItem.setTag(MENU_BUY);
+		wheatTextItem.setTag(ITEM_WHEAT);
 		mItemsScene.registerTouchArea(wheatTextItem);
 		mItemsScene.attachChild(wheatTextItem);
 
 		final ButtonSprite bronzeTextItem = new ButtonSprite(424, 4, mItemBronzeTextureRegion, getVertexBufferObjectManager(), this);
-		//sellMenuItem.setTag(MENU_SELL);
+		bronzeTextItem.setTag(ITEM_BRONZE);
 		mItemsScene.registerTouchArea(bronzeTextItem);
 		mItemsScene.attachChild(bronzeTextItem);
 		
 		final ButtonSprite oliveTextItem = new ButtonSprite(18, 4, mItemOlivesTextureRegion, getVertexBufferObjectManager(), this);
-		//travelMenuItem.setTag(MENU_TRAVEL);
+		oliveTextItem.setTag(ITEM_OLIVES);
 		mItemsScene.registerTouchArea(oliveTextItem);
 		mItemsScene.attachChild(oliveTextItem);
 		
 		mItemsScene.setTouchAreaBindingOnActionDownEnabled(true);
 		
+		mBuyInput = new Sprite(75, 255, mBuyInputTextureRegion, getVertexBufferObjectManager());
+		
 		mNumKeyboard.loadScene();
-		mItemsScene.setChildScene(mNumKeyboard.getScene());
 		
 		return mItemsScene;
 	}
@@ -88,11 +95,13 @@ public class Buy extends Main implements OnClickListener {
 		mBgTextureRegion = AEUtils.createTextureRegionFromAssets("gfx/buy_bg.png", mBaseActivity);
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		mItemTexture = new BitmapTextureAtlas(this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-		mItemWheatTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "buy_item_wheat.png",    0,   0, 1, 2);
-		mItemBronzeTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "buy_item_bronze.png",   0,  84, 1, 2);
+		mItemTexture = new BitmapTextureAtlas(this.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+		mItemWheatTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "buy_item_wheat.png",  0,   0, 1, 2);
+		mItemBronzeTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "buy_item_bronze.png", 0,  84, 1, 2);
 		mItemOlivesTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "buy_item_olives.png", 0, 168, 1, 2);
 
+		mBuyInputTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mItemTexture, mBaseActivity, "buy_input.png", 0, 276);
+		
 		mBgTextureRegion.getTexture().load();
 		mItemTexture.load();
 		mNumKeyboard.loadResources();
@@ -107,8 +116,11 @@ public class Buy extends Main implements OnClickListener {
 
 	@Override
 	public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		// TODO Auto-generated method stub
-		
+		//int tag = pButtonSprite.getTag();
+		pButtonSprite.setCurrentTileIndex(1);
+		mItemsScene.attachChild(mBuyInput);
+		mItemsScene.setChildScene(mNumKeyboard.getScene());
+
 	}
 
 
