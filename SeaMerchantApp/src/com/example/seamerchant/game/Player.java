@@ -78,6 +78,25 @@ public class Player {
 	public Item getOlives() {
 		return olives;
 	}
+
+	public Item getItem(int type) {
+		switch(type) {
+		case Item.WHEAT:
+			return this.wheat;
+		case Item.OLIVES:
+			return this.olives;
+		case Item.BRONZE:
+			return this.bronze;
+		}
+		return null;
+	}
+
+	public void reduceMoney(int cost) {
+		this.money -= cost;
+		if (this.money < 0) {
+			throw new IllegalArgumentException("Money cannot be negative");
+		}
+	}
 	
 	
 }

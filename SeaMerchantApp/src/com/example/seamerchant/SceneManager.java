@@ -6,13 +6,13 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
-import android.os.storage.StorageManager;
-
 import com.example.seamerchant.game.Game;
 import com.example.seamerchant.game.Game.OnGameChangeListener;
+import com.example.seamerchant.game.PricedItem;
 import com.example.seamerchant.scene.Base;
 import com.example.seamerchant.scene.Base.OnActionDownListener;
 import com.example.seamerchant.scene.Buy;
+import com.example.seamerchant.scene.Buy.OnBuyItemListener;
 import com.example.seamerchant.scene.EndDay;
 import com.example.seamerchant.scene.GameStart;
 import com.example.seamerchant.scene.LowerBanner;
@@ -24,7 +24,7 @@ import com.example.seamerchant.scene.SideBanner;
 import com.example.seamerchant.scene.Weather;
 import com.example.seamerchant.scene.Welcome;
 
-public class SceneManager implements OnOptionClickListener, OnGameChangeListener {
+public class SceneManager implements OnOptionClickListener, OnGameChangeListener, OnBuyItemListener {
 
 	private Engine mEngine;
 	private SimpleBaseGameActivity mBaseActivity;
@@ -119,7 +119,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 
 	private void startBuyScene() {
-		final Buy buy = new Buy(mBaseActivity, mSideBanner, mLowerBanner, mGame);
+		final Buy buy = new Buy(mBaseActivity, mSideBanner, mLowerBanner, mGame, this);
 		buy.loadResourcesAndScene();
 		mEngine.setScene(buy.getScene());
 	}
@@ -159,6 +159,8 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		op.loadResourcesAndScene();
 		op.setOnOptionClickListener(this);
 		mEngine.setScene(op.getScene());
+		mSideBanner.refresh();
+		mLowerBanner.refresh();
 	}
 
 	private void startWeatherScene() {
@@ -238,5 +240,12 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	public void onGameFinish() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void onBuyItem(PricedItem item, int count, Buy buy) {
+		mGame.buyItem(item, count);
+		setCurrentScene(SceneType.OPTIONS);
+		buy.detachAndUnload();
 	}
 }

@@ -6,6 +6,7 @@ import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.vbo.DrawType;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import android.graphics.Color;
@@ -18,13 +19,16 @@ import com.example.seamerchant.game.Location;
 import com.example.seamerchant.game.PricedItem;
 
 public class LowerBanner extends Base {
+	private static final int MAX_CHARS = 7;
 	private static final float OFFSET_TOP = 343.0f;
 	private static final float OFFSET_LEFT = 23.0f;
-	private static final float OFFSET_TEXT_LEFT = 23.0f;
 	
 	private TextureRegion mBgTextureRegion;
 	private Font mFont;
 	private Game mGame;
+	private Text mItemEgypt;
+	private Text mItemIsrael;
+	private Text mItemTurkey;
 	
 	public LowerBanner(SimpleBaseGameActivity baseActivity,Game game) {
 		super(baseActivity);
@@ -45,15 +49,15 @@ public class LowerBanner extends Base {
 	private void setPriceTexts(Scene scene, int type,int offsetTop) {
 		// there must be a better way to do this.
 		// set bronze
-		PricedItem item = (PricedItem)mGame.getLocation(Location.EGYPT).getItem(type);
-	    Text ItemEgypt = new Text(OFFSET_LEFT+20, OFFSET_TOP+offsetTop, this.mFont,item.getPrice().toString(), getVertexBufferObjectManager());
-	    scene.attachChild(ItemEgypt);
-	    item = (PricedItem)mGame.getLocation(Location.ISRAEL).getItem(type);
-	    Text ItemIsrael = new Text(OFFSET_LEFT+279, OFFSET_TOP+offsetTop, this.mFont,item.getPrice().toString(), getVertexBufferObjectManager());
-	    scene.attachChild(ItemIsrael);
-	    item = (PricedItem)mGame.getLocation(Location.TURKEY).getItem(type);
-	    Text ItemTurkey = new Text(OFFSET_LEFT+553, OFFSET_TOP+offsetTop, this.mFont,item.getPrice().toString(), getVertexBufferObjectManager());
-	    scene.attachChild(ItemTurkey);
+		PricedItem item = (PricedItem) mGame.getLocation(Location.EGYPT).getItem(type);
+		mItemEgypt = new Text(OFFSET_LEFT + 20, OFFSET_TOP + offsetTop, this.mFont, item.getPrice().toString(), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+		scene.attachChild(mItemEgypt);
+		item = (PricedItem) mGame.getLocation(Location.ISRAEL).getItem(type);
+		mItemIsrael = new Text(OFFSET_LEFT + 279, OFFSET_TOP + offsetTop, this.mFont, item.getPrice().toString(), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+		scene.attachChild(mItemIsrael);
+		item = (PricedItem) mGame.getLocation(Location.TURKEY).getItem(type);
+		mItemTurkey = new Text(OFFSET_LEFT + 553, OFFSET_TOP + offsetTop, this.mFont, item.getPrice().toString(), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+		scene.attachChild(mItemTurkey);
 	}
 
 	@Override
@@ -78,4 +82,16 @@ public class LowerBanner extends Base {
 		return 0;
 	}
 
+	public void refresh() {
+		refreshPrices(Item.BRONZE);
+		refreshPrices(Item.OLIVES);
+		refreshPrices(Item.WHEAT);
+	}
+
+	private void refreshPrices(int type) {
+		PricedItem item = (PricedItem) mGame.getLocation(Location.EGYPT).getItem(type);
+		mItemEgypt.setText(item.getPrice().toString());
+		mItemIsrael.setText(item.getPrice().toString());
+		mItemTurkey.setText(item.getPrice().toString());
+	}
 }

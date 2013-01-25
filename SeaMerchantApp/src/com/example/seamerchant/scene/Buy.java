@@ -14,10 +14,12 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.DrawType;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.debug.Debug;
 
 import com.example.seamerchant.andengine.AEUtils;
 import com.example.seamerchant.game.Game;
 import com.example.seamerchant.game.Item;
+import com.example.seamerchant.game.PricedItem;
 import com.example.seamerchant.scene.NumKeyboard.OnNumKeyboardUpdateListener;
 
 public class Buy extends Main implements OnClickListener, OnNumKeyboardUpdateListener {
@@ -31,20 +33,23 @@ public class Buy extends Main implements OnClickListener, OnNumKeyboardUpdateLis
 	private Scene mItemsScene;
 	private NumKeyboard mNumKeyboard;
 	private Sprite mBuyInput;
-	private int mQuantityLimit;
 	private Font mFont;
 	private Text mAvailableText;
 	private Text mQuantityText;
 	private Game mGame;
+	private OnBuyItemListener mListener;
+	private PricedItem mSelectedItem;
+	private int mPurchasableCount;
 	
 	public interface OnBuyItemListener {
-		void onBuyItem();
+		void onBuyItem(PricedItem item, int count, Buy buy);
 	}
 	
-	public Buy(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner, Game game) {
+	public Buy(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner, Game game, OnBuyItemListener listener) {
 		super(baseActivity, sideBanner, lowerBanner);
 		mNumKeyboard = new NumKeyboard(400, 25,baseActivity, this);
 		mGame = game;
+		mListener = listener;
 	}
 
 	@Override
@@ -111,9 +116,11 @@ public class Buy extends Main implements OnClickListener, OnNumKeyboardUpdateLis
 		//int tag = pButtonSprite.getTag();
 		pButtonSprite.setCurrentTileIndex(1);
 		int itemId = pButtonSprite.getTag();
-		Item item = mGame.getCurrentLocation().getItem(itemId);
-		mQuantityLimit = item.getCount();
-		mAvailableText.setText(item.getCount() + "");
+		mSelectedItem = mGame.getCurrentLocation().getItem(itemId);
+		int purchasable = (int)(mGame.getPlayer().getMoney() / mSelectedItem.getPrice());
+		mPurchasableCount = Math.min(mSelectedItem.getCount(), purchasable);
+		Debug.d("Money: "+mGame.getPlayer().getMoney()+", Price: "+mSelectedItem.getPrice()+", Available:" + mPurchasableCount);
+		mAvailableText.setText(mSelectedItem.getCount() + "");
 		mItemsScene.attachChild(mBuyInput);
 		mItemsScene.attachChild(mAvailableText);
 		mItemsScene.attachChild(mQuantityText);
@@ -127,7 +134,7 @@ public class Buy extends Main implements OnClickListener, OnNumKeyboardUpdateLis
 			mQuantityText.setText("0");
 			return false;
 		}
-		if (num <= mQuantityLimit) {
+		if (num <= mPurchasableCount) {
 			mQuantityText.setText(num + "");
 			return true;
 		}
@@ -136,8 +143,13 @@ public class Buy extends Main implements OnClickListener, OnNumKeyboardUpdateLis
 
 	@Override
 	public void onNumberEnter(Integer num, NumKeyboard kb) {
-		// TODO Auto-generated method stub
-		
+		mItemsScene.clearChildScene();
+		mItemsScene.detachChild(mBuyInput);
+		mItemsScene.detachChild(mAvailableText);
+		mItemsScene.detachChild(mQuantityText);
+		if (num != null) {
+			mListener.onBuyItem(mSelectedItem, num, this);
+		}
 	}
 
 }

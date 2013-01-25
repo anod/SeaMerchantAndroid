@@ -143,4 +143,13 @@ public class Game {
 	public void setStormyWeather(int mStormyWeather) {
 		this.mStormyWeather = mStormyWeather;
 	}
+
+	public void buyItem(PricedItem item, int count) {
+		int cost = item.getPrice() * count;
+		item.reduceCount(count);
+		Item playerItem = mPlayer.getItem(item.getType());
+		playerItem.increaseCount(count);
+		mPlayer.reduceMoney(cost);
+		
+	}
 }

@@ -32,7 +32,7 @@ public class Location {
 		return bronze;
 	}
 
-	public Item getItem(int type){
+	public PricedItem getItem(int type){
 		switch (type) {
 		case Item.BRONZE:
 			return bronze;

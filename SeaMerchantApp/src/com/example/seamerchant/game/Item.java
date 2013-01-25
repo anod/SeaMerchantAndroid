@@ -27,4 +27,15 @@ public class Item {
 		this.count = count;
 	}
 
+	public void reduceCount(int decCount) {
+		this.count = this.count - decCount;
+		if (this.count < 0) {
+			throw new IllegalArgumentException("Count cannot be negative");
+		}
+	}
+
+	public void increaseCount(int incCount) {
+		this.count += incCount;
+	}
+
 }
