@@ -119,7 +119,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 
 	private void startBuyScene() {
-		final Buy buy = new Buy(mBaseActivity, mSideBanner, mLowerBanner);
+		final Buy buy = new Buy(mBaseActivity, mSideBanner, mLowerBanner, mGame);
 		buy.loadResourcesAndScene();
 		mEngine.setScene(buy.getScene());
 	}

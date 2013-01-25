@@ -4,23 +4,24 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
+import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.vbo.DrawType;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-import org.andengine.util.debug.Debug;
 
 import com.example.seamerchant.andengine.AEUtils;
+import com.example.seamerchant.game.Game;
+import com.example.seamerchant.game.Item;
 import com.example.seamerchant.scene.NumKeyboard.OnNumKeyboardUpdateListener;
 
-public class Buy extends Main implements OnClickListener {
-	public static final int ITEM_WHEAT = 0;
-	public static final int ITEM_BRONZE = 1;
-	public static final int ITEM_OLIVES = 2;
-
+public class Buy extends Main implements OnClickListener, OnNumKeyboardUpdateListener {
+	private static final int MAX_CHARS = 7;
 	private TextureRegion mBgTextureRegion;
 	private BitmapTextureAtlas mItemTexture;
 	private ITiledTextureRegion mItemWheatTextureRegion;
@@ -30,34 +31,20 @@ public class Buy extends Main implements OnClickListener {
 	private Scene mItemsScene;
 	private NumKeyboard mNumKeyboard;
 	private Sprite mBuyInput;
-	
-	private OnNumKeyboardUpdateListener mNumKeyboardListener = new OnNumKeyboardUpdateListener() {
-		
-		@Override
-		public void onNumberUpdate(int num, NumKeyboard kb) {
-			Debug.d("Update - Num: "+num);
-		}
-		
-		@Override
-		public void onNumberEnter(int num, NumKeyboard kb) {
-			Debug.d("Enter - Num: "+num);
-		}
-		
-		@Override
-		public void onNumberEmpty(NumKeyboard kb) {
-			Debug.d("Empty - Num: ");
-
-		}
-	};
+	private int mQuantityLimit;
+	private Font mFont;
+	private Text mAvailableText;
+	private Text mQuantityText;
+	private Game mGame;
 	
 	public interface OnBuyItemListener {
 		void onBuyItem();
 	}
 	
-	
-	public Buy(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner) {
+	public Buy(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner, Game game) {
 		super(baseActivity, sideBanner, lowerBanner);
-		mNumKeyboard = new NumKeyboard(400, 25,baseActivity, mNumKeyboardListener);
+		mNumKeyboard = new NumKeyboard(400, 25,baseActivity, this);
+		mGame = game;
 	}
 
 	@Override
@@ -67,24 +54,27 @@ public class Buy extends Main implements OnClickListener {
 		mItemsScene.attachChild(backgroundSprite);
 
 		final ButtonSprite wheatTextItem = new ButtonSprite(427, 205, mItemWheatTextureRegion, getVertexBufferObjectManager(), this);
-		wheatTextItem.setTag(ITEM_WHEAT);
+		wheatTextItem.setTag(Item.WHEAT);
 		mItemsScene.registerTouchArea(wheatTextItem);
 		mItemsScene.attachChild(wheatTextItem);
 
 		final ButtonSprite bronzeTextItem = new ButtonSprite(424, 4, mItemBronzeTextureRegion, getVertexBufferObjectManager(), this);
-		bronzeTextItem.setTag(ITEM_BRONZE);
+		bronzeTextItem.setTag(Item.BRONZE);
 		mItemsScene.registerTouchArea(bronzeTextItem);
 		mItemsScene.attachChild(bronzeTextItem);
 		
 		final ButtonSprite oliveTextItem = new ButtonSprite(18, 4, mItemOlivesTextureRegion, getVertexBufferObjectManager(), this);
-		oliveTextItem.setTag(ITEM_OLIVES);
+		oliveTextItem.setTag(Item.OLIVES);
 		mItemsScene.registerTouchArea(oliveTextItem);
 		mItemsScene.attachChild(oliveTextItem);
 		
 		mItemsScene.setTouchAreaBindingOnActionDownEnabled(true);
 		
 		mBuyInput = new Sprite(75, 255, mBuyInputTextureRegion, getVertexBufferObjectManager());
-		
+	    mAvailableText = new Text(110, 258, mFont, "0", MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+	    mQuantityText = new Text(110, 295, mFont, "0", MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+
+	    
 		mNumKeyboard.loadScene();
 		
 		return mItemsScene;
@@ -105,6 +95,8 @@ public class Buy extends Main implements OnClickListener {
 		mBgTextureRegion.getTexture().load();
 		mItemTexture.load();
 		mNumKeyboard.loadResources();
+		mFont = AEUtils.createGameFont(mBaseActivity);
+	    mFont.load();
 	}
 
 	@Override
@@ -118,10 +110,34 @@ public class Buy extends Main implements OnClickListener {
 	public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		//int tag = pButtonSprite.getTag();
 		pButtonSprite.setCurrentTileIndex(1);
+		int itemId = pButtonSprite.getTag();
+		Item item = mGame.getCurrentLocation().getItem(itemId);
+		mQuantityLimit = item.getCount();
+		mAvailableText.setText(item.getCount() + "");
 		mItemsScene.attachChild(mBuyInput);
+		mItemsScene.attachChild(mAvailableText);
+		mItemsScene.attachChild(mQuantityText);
 		mItemsScene.setChildScene(mNumKeyboard.getScene());
 
 	}
 
+	@Override
+	public boolean onNumberUpdate(Integer num, NumKeyboard kb) {
+		if (num == null) {
+			mQuantityText.setText("0");
+			return false;
+		}
+		if (num <= mQuantityLimit) {
+			mQuantityText.setText(num + "");
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void onNumberEnter(Integer num, NumKeyboard kb) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

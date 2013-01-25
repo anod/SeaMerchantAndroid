@@ -21,6 +21,7 @@ public class PricedItem extends Item{
 	public PricedItem(int type, int price) {
 		super(type);
 		this.price = price;
+		this.count = 100;//TODO init counter
 	}
 
 	

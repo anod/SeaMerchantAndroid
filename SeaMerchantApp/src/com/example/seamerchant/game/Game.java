@@ -15,7 +15,6 @@ public class Game {
 	private Location mLocTurkey;
 	private Location mLocEgypt;
 	private Weather mWeather;
-	
 	private int mStormyWeather = 0;
 
 	private OnGameChangeListener mListener;
@@ -97,6 +96,10 @@ public class Game {
 
 	public int getCurrentDay() {
 		return mCurrentDay;
+	}
+	
+	public Location getCurrentLocation() {
+		return getLocation(mPlayer.getLocation());
 	}
 	
 	public void nextDay() {

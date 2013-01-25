@@ -39,9 +39,8 @@ public class NumKeyboard extends Base implements OnClickListener {
 	private int mOffsetY;
 	
 	public interface OnNumKeyboardUpdateListener {
-		void onNumberUpdate(int num, NumKeyboard kb);
-		void onNumberEnter(int num, NumKeyboard kb);
-		void onNumberEmpty(NumKeyboard kb);
+		boolean onNumberUpdate(Integer num, NumKeyboard kb);
+		void onNumberEnter(Integer num, NumKeyboard kb);
 	}
 
 	public NumKeyboard(int x, int y, SimpleBaseGameActivity baseActivity, OnNumKeyboardUpdateListener listener) {
@@ -130,6 +129,9 @@ public class NumKeyboard extends Base implements OnClickListener {
 			if (mCurrentNumber.length() > 0) {
 				mListener.onNumberEnter(Integer.parseInt(mCurrentNumber.toString()), this);
 				this.detachSelf();
+			} else {
+				mListener.onNumberEnter(null, this);
+				this.detachSelf();
 			}
 			return;
 		}
@@ -139,14 +141,16 @@ public class NumKeyboard extends Base implements OnClickListener {
 				if (mCurrentNumber.length() > 0) {
 					mListener.onNumberUpdate(Integer.parseInt(mCurrentNumber.toString()), this);
 				} else {
-					mListener.onNumberEmpty(this);
+					mListener.onNumberUpdate(null, this);
 				}
 			}
 			return;
 		}
 		if (mCurrentNumber.length() < MAX_LENGTH_NUM) {
 			mCurrentNumber.append(tag);
-			mListener.onNumberUpdate(Integer.parseInt(mCurrentNumber.toString()), this);
+			if (!mListener.onNumberUpdate(Integer.parseInt(mCurrentNumber.toString()), this)) {
+				mCurrentNumber.deleteCharAt(mCurrentNumber.length() - 1);
+			}
 		}
 	}
 

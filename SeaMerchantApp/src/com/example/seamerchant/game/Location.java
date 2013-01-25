@@ -1,6 +1,5 @@
 package com.example.seamerchant.game;
 
-import java.util.Random;
 
 public class Location {
 	
