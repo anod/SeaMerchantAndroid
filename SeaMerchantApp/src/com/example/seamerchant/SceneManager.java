@@ -21,6 +21,7 @@ import com.example.seamerchant.scene.Options;
 import com.example.seamerchant.scene.Options.OnOptionClickListener;
 import com.example.seamerchant.scene.Rest;
 import com.example.seamerchant.scene.SideBanner;
+import com.example.seamerchant.scene.Travel;
 import com.example.seamerchant.scene.Weather;
 import com.example.seamerchant.scene.Welcome;
 
@@ -46,7 +47,8 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		PIRATES,
 		PIRATERESULT,
 		NEXTDAY,
-		REST
+		REST,
+		TRAVEL
 	}
 
 	public SceneManager(Game game, SimpleBaseGameActivity baseActivity) {
@@ -112,11 +114,19 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		case REST:
 			startRestScene();
 			break;
+		case TRAVEL:
+			startTravelScene();
 		default:
 			break;
 		}
 	}
 
+
+	private void startTravelScene() {
+		final Travel tl = new Travel(mBaseActivity, mSideBanner, mLowerBanner);
+		tl.loadResourcesAndScene();
+		mEngine.setScene(tl.getScene());
+	}
 
 	private void startBuyScene() {
 		final Buy buy = new Buy(mBaseActivity, mSideBanner, mLowerBanner, mGame, this);
@@ -224,6 +234,10 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 			} else {
 				setCurrentScene(SceneType.SELL);
 			}
+			break;
+		case Options.MENU_TRAVEL:
+			setCurrentScene(SceneType.TRAVEL);
+			options.detachAndUnload();
 			break;
 		default:
 			break;
