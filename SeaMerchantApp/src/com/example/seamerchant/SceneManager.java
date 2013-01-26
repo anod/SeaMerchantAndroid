@@ -274,6 +274,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 	@Override
 	public void onSellItem(PricedItem item, int count, Sell sell) {
+		mGame.sellItem(item, count);
 		setCurrentScene(SceneType.OPTIONS);
 		sell.detachAndUnload();	}
 	}

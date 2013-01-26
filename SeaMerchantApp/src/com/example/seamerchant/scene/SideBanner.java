@@ -36,11 +36,11 @@ public class SideBanner extends Base {
 	    
 	    mMoney = new Text(OFFSET_LEFT+50, 300f, this.mFont, String.format("%d", mGame.getPlayer().getMoney()), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
 	    scene.attachChild(mMoney);
-	    mWheat = new Text(OFFSET_LEFT+30, 222f, this.mFont, String.format("%d", mGame.getPlayer().getBronze().getCount()), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+	    mWheat = new Text(OFFSET_LEFT+30, 222f, this.mFont, String.format("%d", mGame.getPlayer().getWheat().getCount()), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
 	    scene.attachChild(mWheat);
 	    mOlives = new Text(OFFSET_LEFT+30, 189f, this.mFont, String.format("%d", mGame.getPlayer().getOlives().getCount()), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
 	    scene.attachChild(mOlives);
-	    mBronze = new Text(OFFSET_LEFT+30, 152f, this.mFont, String.format("%d", mGame.getPlayer().getWheat().getCount()), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+	    mBronze = new Text(OFFSET_LEFT+30, 152f, this.mFont, String.format("%d", mGame.getPlayer().getBronze().getCount()), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
 	    scene.attachChild(mBronze);
 	    return scene;
 	}
@@ -69,9 +69,9 @@ public class SideBanner extends Base {
 
 	public void refresh() {
 		mMoney.setText(mGame.getPlayer().getMoney() + "");
-		mWheat.setText(mGame.getPlayer().getBronze().getCount() + "");
+		mWheat.setText(mGame.getPlayer().getWheat().getCount() + "");
 		mOlives.setText(mGame.getPlayer().getOlives().getCount() + "");
-		mBronze.setText(mGame.getPlayer().getWheat().getCount() + "");
+		mBronze.setText(mGame.getPlayer().getBronze().getCount() + "");
 
 	}
 

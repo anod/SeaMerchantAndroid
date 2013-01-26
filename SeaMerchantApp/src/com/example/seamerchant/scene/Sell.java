@@ -34,7 +34,6 @@ public class Sell extends Main implements OnClickListener, OnNumKeyboardUpdateLi
 	private NumKeyboard mNumKeyboard;
 	private Sprite mSellInput;
 	private Font mFont;
-	private Text mAvailableText;
 	private Text mQuantityText;
 	private Game mGame;
 	private OnSellItemListener mListener;
@@ -58,7 +57,7 @@ public class Sell extends Main implements OnClickListener, OnNumKeyboardUpdateLi
 		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
 		mItemsScene.attachChild(backgroundSprite);
 
-		final ButtonSprite wheatTextItem = new ButtonSprite(46, 102, mItemWheatTextureRegion, getVertexBufferObjectManager(), this);
+		final ButtonSprite wheatTextItem = new ButtonSprite(46, 120, mItemWheatTextureRegion, getVertexBufferObjectManager(), this);
 		wheatTextItem.setTag(Item.WHEAT);
 		mItemsScene.registerTouchArea(wheatTextItem);
 		mItemsScene.attachChild(wheatTextItem);
@@ -68,7 +67,7 @@ public class Sell extends Main implements OnClickListener, OnNumKeyboardUpdateLi
 		mItemsScene.registerTouchArea(bronzeTextItem);
 		mItemsScene.attachChild(bronzeTextItem);
 		
-		final ButtonSprite oliveTextItem = new ButtonSprite(46, 76, mItemOlivesTextureRegion, getVertexBufferObjectManager(), this);
+		final ButtonSprite oliveTextItem = new ButtonSprite(46, 85, mItemOlivesTextureRegion, getVertexBufferObjectManager(), this);
 		oliveTextItem.setTag(Item.OLIVES);
 		mItemsScene.registerTouchArea(oliveTextItem);
 		mItemsScene.attachChild(oliveTextItem);
@@ -76,7 +75,7 @@ public class Sell extends Main implements OnClickListener, OnNumKeyboardUpdateLi
 		mItemsScene.setTouchAreaBindingOnActionDownEnabled(true);
 		
 		mSellInput = new Sprite(75, 255, mSellInputTextureRegion, getVertexBufferObjectManager());
-	    mAvailableText = new Text(110, 258, mFont, "0", MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+	    
 	    mQuantityText = new Text(110, 295, mFont, "0", MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
 
 	    
@@ -92,8 +91,8 @@ public class Sell extends Main implements OnClickListener, OnNumKeyboardUpdateLi
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		mItemTexture = new BitmapTextureAtlas(this.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
 		mItemWheatTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "sell_item_wheat.png",  0,   0, 1, 2);
-		mItemBronzeTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "sell_item_bronze.png", 0,  32, 1, 2);
-		mItemOlivesTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "sell_item_olives.png", 0, 64, 1, 2);
+		mItemBronzeTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "sell_item_bronze.png", 0,  48, 1, 2);
+		mItemOlivesTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "sell_item_olives.png", 0, 96, 1, 2);
 
 		mSellInputTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mItemTexture, mBaseActivity, "sell_input.png", 0, 276);
 		
@@ -117,13 +116,10 @@ public class Sell extends Main implements OnClickListener, OnNumKeyboardUpdateLi
 		pButtonSprite.setCurrentTileIndex(1);
 		int itemId = pButtonSprite.getTag();
 		mSelectedItem = mGame.getCurrentLocation().getItem(itemId);
-		int purchasable = (int)(mGame.getPlayer().getMoney() / mSelectedItem.getPrice());
-		mPurchasableCount = Math.min(mSelectedItem.getCount(), purchasable);
-		Debug.d("Money: "+mGame.getPlayer().getMoney()+", Price: "+mSelectedItem.getPrice()+", Available:" + mPurchasableCount);
-		//mAvailableText.setText(mSelectedItem.getCount() + "");
-		mAvailableText.setText(mPurchasableCount + "");
+		
+		Debug.d("Money: "+mGame.getPlayer().getMoney()+", Price: "+mSelectedItem.getPrice()+", Available:" + mPurchasableCount);		
 		mItemsScene.attachChild(mSellInput);
-		mItemsScene.attachChild(mAvailableText);
+		
 		mItemsScene.attachChild(mQuantityText);
 		mItemsScene.setChildScene(mNumKeyboard.getScene());
 
@@ -135,23 +131,25 @@ public class Sell extends Main implements OnClickListener, OnNumKeyboardUpdateLi
 			mQuantityText.setText("0");
 			return false;
 		}
-		if (num <= mPurchasableCount) {
+		if(num <= mGame.getPlayer().getItem(mSelectedItem.getType()).getCount())
+		{
 			mQuantityText.setText(num + "");
 			return true;
 		}
 		return false;
+
 	}
 
 	@Override
 	public void onNumberEnter(Integer num, NumKeyboard kb) {
 		mItemsScene.clearChildScene();
 		mItemsScene.detachChild(mSellInput);
-		mItemsScene.detachChild(mAvailableText);
 		mItemsScene.detachChild(mQuantityText);
-		if (num != null) {
+		if (num != null ) {
 			mListener.onSellItem(mSelectedItem, num, this);
 		} else {
 			//Unpress button
+		
 			getSpriteByItemId(mSelectedItem.getType()).setCurrentTileIndex(0);
 		}
 		mSelectedItem = null;

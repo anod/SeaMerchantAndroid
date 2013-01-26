@@ -97,6 +97,10 @@ public class Player {
 			throw new IllegalArgumentException("Money cannot be negative");
 		}
 	}
+
+	public void increaseMoney(int cost) {
+		this.money += cost;
+	}
 	
 	
 }
