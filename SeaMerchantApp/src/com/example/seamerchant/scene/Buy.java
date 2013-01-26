@@ -120,7 +120,8 @@ public class Buy extends Main implements OnClickListener, OnNumKeyboardUpdateLis
 		int purchasable = (int)(mGame.getPlayer().getMoney() / mSelectedItem.getPrice());
 		mPurchasableCount = Math.min(mSelectedItem.getCount(), purchasable);
 		Debug.d("Money: "+mGame.getPlayer().getMoney()+", Price: "+mSelectedItem.getPrice()+", Available:" + mPurchasableCount);
-		mAvailableText.setText(mSelectedItem.getCount() + "");
+		//mAvailableText.setText(mSelectedItem.getCount() + "");
+		mAvailableText.setText(mPurchasableCount + "");
 		mItemsScene.attachChild(mBuyInput);
 		mItemsScene.attachChild(mAvailableText);
 		mItemsScene.attachChild(mQuantityText);
@@ -153,6 +154,7 @@ public class Buy extends Main implements OnClickListener, OnNumKeyboardUpdateLis
 			//Unpress button
 			getSpriteByItemId(mSelectedItem.getType()).setCurrentTileIndex(0);
 		}
+		mSelectedItem = null;
 	}
 	
 	private ButtonSprite getSpriteByItemId(int itemId) {
