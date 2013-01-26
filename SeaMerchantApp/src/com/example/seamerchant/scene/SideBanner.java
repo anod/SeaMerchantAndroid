@@ -2,8 +2,13 @@ package com.example.seamerchant.scene;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.Font;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.DrawType;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
@@ -16,12 +21,15 @@ public class SideBanner extends Base {
 	private static final int MAX_CHARS = 7;
 	private static final float OFFSET_LEFT = 610.0f;
 	private TextureRegion mBgTextureRegion;
+	private BitmapTextureAtlas mItemTexture;
+	private ITiledTextureRegion mDaysTextureRegion;
 	private Font mFont;
 	private Game mGame;
 	private Text mMoney;
 	private Text mWheat;
 	private Text mOlives;
 	private Text mBronze;
+	private TiledSprite mCurrentDay;
 	
 	public SideBanner(SimpleBaseGameActivity baseActivity, Game game) {
 		super(baseActivity);
@@ -42,6 +50,10 @@ public class SideBanner extends Base {
 	    scene.attachChild(mOlives);
 	    mBronze = new Text(OFFSET_LEFT+30, 152f, this.mFont, String.format("%d", mGame.getPlayer().getBronze().getCount()), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
 	    scene.attachChild(mBronze);
+	    mCurrentDay = new TiledSprite(OFFSET_LEFT+30, 40, mDaysTextureRegion, getVertexBufferObjectManager()); 
+	    int currentDayIndex = 7 - mGame.getCurrentDay();
+		mCurrentDay.setCurrentTileIndex(currentDayIndex);
+	    scene.attachChild(mCurrentDay);
 	    return scene;
 	}
 
@@ -59,6 +71,9 @@ public class SideBanner extends Base {
 		mBgTextureRegion = AEUtils.createTextureRegionFromAssets("gfx/sidebg.png", mBaseActivity);
 		mFont = AEUtils.createGameFont(mBaseActivity);
 	    mFont.load();
+	    mItemTexture = new BitmapTextureAtlas(this.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+		mDaysTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "gfx/days_text.png", 0, 0,1,7);
+		mItemTexture.load();
 	}
 
 	@Override
@@ -72,7 +87,6 @@ public class SideBanner extends Base {
 		mWheat.setText(mGame.getPlayer().getWheat().getCount() + "");
 		mOlives.setText(mGame.getPlayer().getOlives().getCount() + "");
 		mBronze.setText(mGame.getPlayer().getBronze().getCount() + "");
-
 	}
 
 }

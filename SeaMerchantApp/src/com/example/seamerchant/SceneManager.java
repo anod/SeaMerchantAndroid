@@ -234,6 +234,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 			options.detachAndUnload();
 			break;
 		case Options.MENU_BUY:
+			// TODO consider adding a message for buying if you have no money
 			setCurrentScene(SceneType.BUY);
 			options.detachAndUnload();
 			break;
