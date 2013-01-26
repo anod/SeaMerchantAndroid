@@ -51,7 +51,7 @@ public class AEUtils {
 			256, 256, 
 			Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD), 
 			30,
-			Color.WHITE
+			Color.rgb(173, 88, 29)
 		);
 	}
 }
