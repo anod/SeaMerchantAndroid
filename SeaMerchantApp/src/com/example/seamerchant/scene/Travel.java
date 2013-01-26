@@ -37,7 +37,7 @@ public class Travel extends Main implements OnClickListener {
 		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
 		mTravelScene.attachChild(backgroundSprite);
 		
-		final ButtonSprite israelItem = new ButtonSprite(544, 253, mLocIsraelTextureRegion, getVertexBufferObjectManager(), this);
+		final ButtonSprite israelItem = new ButtonSprite(516, 253, mLocIsraelTextureRegion, getVertexBufferObjectManager(), this);
 		israelItem.setTag(Location.ISRAEL);
 		mTravelScene.registerTouchArea(israelItem);
 		mTravelScene.attachChild(israelItem);
@@ -47,7 +47,7 @@ public class Travel extends Main implements OnClickListener {
 		mTravelScene.registerTouchArea(turkeyItem);
 		mTravelScene.attachChild(turkeyItem);
 		
-		final ButtonSprite egyptItem = new ButtonSprite(179, 320, mLocEgyptTextureRegion, getVertexBufferObjectManager(), this);
+		final ButtonSprite egyptItem = new ButtonSprite(179, 298, mLocEgyptTextureRegion, getVertexBufferObjectManager(), this);
 		egyptItem.setTag(Location.EGYPT);
 		mTravelScene.registerTouchArea(egyptItem);
 		mTravelScene.attachChild(egyptItem);
@@ -66,10 +66,10 @@ public class Travel extends Main implements OnClickListener {
 		
 		mItemTexture = new BitmapTextureAtlas(this.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
 		mLocTurkeyTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "travel_turkey.png", 0,  0, 1, 2);
-		mLocEgyptTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "travel_egypt.png", 0, 96, 1, 2);
-		mLocIsraelTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "travel_israel.png",  96,   0, 1, 2);
+		mLocEgyptTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "travel_egypt.png", 0, 84, 1, 2);
+		mLocIsraelTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "travel_israel.png",  96, 0, 1, 2);
 
-		mBoatTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mItemTexture, mBaseActivity, "travel_boat.png", 0, 187);
+		mBoatTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mItemTexture, mBaseActivity, "travel_boat.png", 147, 0);
 		
 		mBgTextureRegion.getTexture().load();
 		mItemTexture.load();
