@@ -9,6 +9,9 @@ import java.util.Random;
  */
 public class Game {
 	private static final int LAST_DAY = 7;
+	private static final int MAX_TRAVAL = 3;
+	public static final int LONG_TRAVEL = 2;
+	public static final int SHORT_TRAVEL = 1;
 	private int mCurrentDay = 0;
 	private Player mPlayer;
 	private Location mLocIsrael;
@@ -16,8 +19,9 @@ public class Game {
 	private Location mLocEgypt;
 	private Weather mWeather;
 	private int mStormyWeather = 0;
-
 	private OnGameChangeListener mListener;
+	private int mTravelTimes;
+	
 	
 	public interface OnGameChangeListener {
 		void onPiratesAttack();
@@ -111,6 +115,7 @@ public class Game {
 		mCurrentDay++;
 		setWeather();
 		setPrices();
+		mTravelTimes = 0;
 	}
 
 	private void setPrices() {
@@ -159,7 +164,17 @@ public class Game {
 		Item playerItem = mPlayer.getItem(item.getType());
 		item.increaseCount(count);
 		playerItem.reduceCount(count);
-		// basicly i can simply use reduce money with negetive values.
+		// Basically i can simply use reduce money with negative values.
 		mPlayer.increaseMoney(cost);
+	}
+
+	public boolean canTravel(){
+		if(mTravelTimes < MAX_TRAVAL)
+			return true;
+		return false;
+	}
+	public void travel(int travelType)
+	{
+		mTravelTimes += travelType;
 	}
 }

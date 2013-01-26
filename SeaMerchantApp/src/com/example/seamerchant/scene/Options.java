@@ -31,6 +31,7 @@ public class Options extends Main implements OnClickListener {
 	private ITiledTextureRegion mMenuTravelTextureRegion;
 	private ITiledTextureRegion mMenuRestTextureRegion;
 	private ITextureRegion mNoGoods;
+	private ITextureRegion mCantTravel;
 	private int mSelected;
 	private Scene mOptionsScene;
 	
@@ -92,7 +93,7 @@ public class Options extends Main implements OnClickListener {
 		mMenuRestTextureRegion   = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_rest.png",   0, 162, 1, 2);
 
 		mNoGoods = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "msg_no_goods.png", 0, 216);
-		
+		mCantTravel = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "msg_canttravel.png", 0, 289);
 		mBgTextureRegion.getTexture().load();
 		mMenuTexture.load();
 
@@ -131,6 +132,16 @@ public class Options extends Main implements OnClickListener {
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				noGoods.detachSelf();
+			}
+		}));
+	}
+	public void showCantTravelMessage() {
+		final Sprite cantTravel = new Sprite(39, 260, mCantTravel, getVertexBufferObjectManager());
+		mOptionsScene.attachChild(cantTravel);
+		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				cantTravel.detachSelf();
 			}
 		}));
 	}

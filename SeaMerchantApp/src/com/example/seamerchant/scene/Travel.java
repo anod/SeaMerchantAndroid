@@ -25,7 +25,7 @@ public class Travel extends Main implements OnClickListener {
 	private ITextureRegion mBoatTextureRegion;
 	
 	private Scene mTravelScene;
-	private Sprite mBaotSprite;
+	private Sprite mBoatSprite;
 	
 	public Travel(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner) {
 		super(baseActivity, sideBanner, lowerBanner);
@@ -51,10 +51,9 @@ public class Travel extends Main implements OnClickListener {
 		egyptItem.setTag(Location.EGYPT);
 		mTravelScene.registerTouchArea(egyptItem);
 		mTravelScene.attachChild(egyptItem);
-		//
 		
-		mBaotSprite = new Sprite(471, 217, mBoatTextureRegion, getVertexBufferObjectManager());
-		mTravelScene.attachChild(mBaotSprite);
+		mBoatSprite = new Sprite(471, 217, mBoatTextureRegion, getVertexBufferObjectManager());
+		mTravelScene.attachChild(mBoatSprite);
 		
 		
 		return mTravelScene;
@@ -83,7 +82,7 @@ public class Travel extends Main implements OnClickListener {
 
 	@Override
 	public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

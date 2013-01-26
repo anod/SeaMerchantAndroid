@@ -243,11 +243,17 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 				options.showNoGoodsMessage();
 			} else {
 				setCurrentScene(SceneType.SELL);
+				options.detachAndUnload();
 			}
 			break;
 		case Options.MENU_TRAVEL:
+			if(!mGame.canTravel()){
+				options.showCantTravelMessage();
+			}
+			else{
 			setCurrentScene(SceneType.TRAVEL);
 			options.detachAndUnload();
+			}
 			break;
 		default:
 			break;
