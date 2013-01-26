@@ -130,7 +130,7 @@ public class NumKeyboard extends Base implements OnClickListener {
 				mListener.onNumberEnter(Integer.parseInt(mCurrentNumber.toString()), this);
 				this.detachSelf();
 			} else {
-				mListener.onNumberEnter(null, this);
+				mListener.onNumberEnter(0, this);
 				this.detachSelf();
 			}
 			return;

@@ -83,15 +83,17 @@ public class LowerBanner extends Base {
 	}
 
 	public void refresh() {
-		refreshPrices(Item.BRONZE);
-		refreshPrices(Item.OLIVES);
-		refreshPrices(Item.WHEAT);
+			refreshPrices(Item.BRONZE);
+			refreshPrices(Item.OLIVES);
+			refreshPrices(Item.WHEAT);
 	}
 
 	private void refreshPrices(int type) {
 		PricedItem item = (PricedItem) mGame.getLocation(Location.EGYPT).getItem(type);
 		mItemEgypt.setText(item.getPrice().toString());
+		item = (PricedItem) mGame.getLocation(Location.ISRAEL).getItem(type);
 		mItemIsrael.setText(item.getPrice().toString());
+		item = (PricedItem) mGame.getLocation(Location.TURKEY).getItem(type);
 		mItemTurkey.setText(item.getPrice().toString());
 	}
 }

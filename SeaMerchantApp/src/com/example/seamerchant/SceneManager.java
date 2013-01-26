@@ -20,12 +20,14 @@ import com.example.seamerchant.scene.NewDay;
 import com.example.seamerchant.scene.Options;
 import com.example.seamerchant.scene.Options.OnOptionClickListener;
 import com.example.seamerchant.scene.Rest;
+import com.example.seamerchant.scene.Sell;
+import com.example.seamerchant.scene.Sell.OnSellItemListener;
 import com.example.seamerchant.scene.SideBanner;
 import com.example.seamerchant.scene.Travel;
 import com.example.seamerchant.scene.Weather;
 import com.example.seamerchant.scene.Welcome;
 
-public class SceneManager implements OnOptionClickListener, OnGameChangeListener, OnBuyItemListener {
+public class SceneManager implements OnOptionClickListener, OnGameChangeListener, OnBuyItemListener, OnSellItemListener {
 
 	private Engine mEngine;
 	private SimpleBaseGameActivity mBaseActivity;
@@ -107,6 +109,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		case PIRATES:
 			break;
 		case SELL:
+			startSellScene();
 			break;
 		case NEXTDAY:
 			startNextDayScene();
@@ -132,6 +135,11 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		final Buy buy = new Buy(mBaseActivity, mSideBanner, mLowerBanner, mGame, this);
 		buy.loadResourcesAndScene();
 		mEngine.setScene(buy.getScene());
+	}
+	private void startSellScene() {
+		final Sell sell = new Sell(mBaseActivity, mSideBanner, mLowerBanner, mGame, this);
+		sell.loadResourcesAndScene();
+		mEngine.setScene(sell.getScene());
 	}
 
 	private void startRestScene() {
@@ -201,6 +209,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	}
 
 	protected void startGameScene() {
+		mGame.nextDay();
 		final Base gs = new GameStart(mBaseActivity);
 		gs.loadResourcesAndScene();
 		mEngine.setScene(gs.getScene());
@@ -262,4 +271,9 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		setCurrentScene(SceneType.OPTIONS);
 		buy.detachAndUnload();
 	}
-}
+
+	@Override
+	public void onSellItem(PricedItem item, int count, Sell sell) {
+		setCurrentScene(SceneType.OPTIONS);
+		sell.detachAndUnload();	}
+	}

@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class Game {
 	private static final int LAST_DAY = 7;
-	private int mCurrentDay = 1;
+	private int mCurrentDay = 0;
 	private Player mPlayer;
 	private Location mLocIsrael;
 	private Location mLocTurkey;
@@ -36,8 +36,8 @@ public class Game {
 	}
 	
 	private void init() {
-		setWeather();
-		setPrices();
+		//setWeather();
+		//setPrices();
 	}
 
 	public Player getPlayer() {
@@ -60,6 +60,7 @@ public class Game {
 	
 	/**
 	 * TODO: Check what it means.
+	 * ?
 	 */
 	private void setWeather()
 	{
