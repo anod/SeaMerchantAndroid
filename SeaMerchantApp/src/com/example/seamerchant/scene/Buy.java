@@ -149,7 +149,14 @@ public class Buy extends Main implements OnClickListener, OnNumKeyboardUpdateLis
 		mItemsScene.detachChild(mQuantityText);
 		if (num != null) {
 			mListener.onBuyItem(mSelectedItem, num, this);
+		} else {
+			//Unpress button
+			getSpriteByItemId(mSelectedItem.getType()).setCurrentTileIndex(0);
 		}
+	}
+	
+	private ButtonSprite getSpriteByItemId(int itemId) {
+		return (ButtonSprite)mItemsScene.getChildByTag(itemId);
 	}
 
 }
