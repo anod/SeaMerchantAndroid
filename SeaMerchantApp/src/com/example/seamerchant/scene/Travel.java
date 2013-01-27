@@ -1,5 +1,9 @@
 package com.example.seamerchant.scene;
 
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
+import org.andengine.entity.modifier.PathModifier;
+import org.andengine.entity.modifier.PathModifier.Path;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
@@ -11,12 +15,14 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.modifier.IModifier;
+import org.andengine.util.modifier.IModifier.IModifierListener;
 
 import com.example.seamerchant.andengine.AEUtils;
 import com.example.seamerchant.game.Game;
 import com.example.seamerchant.game.Location;
 
-public class Travel extends Main implements OnClickListener {
+public class Travel extends Main implements OnClickListener, IEntityModifierListener {
 	private TextureRegion mBgTextureRegion;
 	private BitmapTextureAtlas mItemTexture;
 	private ITiledTextureRegion mLocIsraelTextureRegion;
@@ -27,6 +33,11 @@ public class Travel extends Main implements OnClickListener {
 	private Scene mTravelScene;
 	private Sprite mBoatSprite;
 	private Game mGame;
+	private int mPlayerLoc;
+	private int mDestLoc;
+	private ButtonSprite mIsraelButton;
+	private ButtonSprite mTurkeyButton;
+	private ButtonSprite mEgyptButton;
 	
 	public Travel(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner, Game game) {
 		super(baseActivity, sideBanner, lowerBanner);
@@ -39,16 +50,15 @@ public class Travel extends Main implements OnClickListener {
 		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
 		mTravelScene.attachChild(backgroundSprite);
 		
-		int selectedLoc = mGame.getPlayer().getLocation();
+		mPlayerLoc = mGame.getPlayer().getLocation();
 
-		createButtonSprite(516, 253, mLocIsraelTextureRegion, Location.ISRAEL, selectedLoc);
-		createButtonSprite(344, 4, mLocTurkeyTextureRegion, Location.TURKEY, selectedLoc);
-		createButtonSprite(179, 298, mLocEgyptTextureRegion, Location.EGYPT, selectedLoc);
+		mIsraelButton = createButtonSprite(516, 253, mLocIsraelTextureRegion, Location.ISRAEL, mPlayerLoc);
+		mTurkeyButton = createButtonSprite(344, 4, mLocTurkeyTextureRegion, Location.TURKEY, mPlayerLoc);
+		mEgyptButton = createButtonSprite(179, 298, mLocEgyptTextureRegion, Location.EGYPT, mPlayerLoc);
 
 		mBoatSprite = new Sprite(471, 217, mBoatTextureRegion, getVertexBufferObjectManager());
 		mTravelScene.attachChild(mBoatSprite);
-		
-		
+
 		return mTravelScene;
 	}
 
@@ -87,7 +97,81 @@ public class Travel extends Main implements OnClickListener {
 
 	@Override
 	public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		int dest = pButtonSprite.getTag();
+		mDestLoc = pButtonSprite.getTag();
+		Path path = getBoatPath(mPlayerLoc, mDestLoc);
+		mBoatSprite.registerEntityModifier(new PathModifier(10, path, this));
+	}
+
+	private Path getBoatPath(int source, int dest) {
+		Path path = null;
+		if (source == Location.ISRAEL && dest == Location.TURKEY) {
+			path = new Path(5);
+			path
+				.to(471, 217)
+				.to(471, 131)
+				.to(471, 73)
+				.to(440, 62)
+				.to(353, 59)
+			;
+		} else if (source == Location.ISRAEL && dest == Location.EGYPT) {
+			path = new Path(3);
+			path
+				.to(471, 217)
+				.to(343, 232)
+				.to(215, 250)
+			;
+		} else if (source == Location.TURKEY && dest == Location.ISRAEL) {
+			path = new Path(5);
+			path
+				.to(353, 59)
+				.to(440, 62)
+				.to(471, 73)
+				.to(471, 131)
+				.to(471, 217)
+			;
+		} else if (source == Location.EGYPT && dest == Location.ISRAEL) {
+			path = new Path(3);
+			path
+				.to(215, 250)
+				.to(343, 232)
+				.to(471, 217)
+			;
+		} else if (source == Location.TURKEY && dest == Location.EGYPT) {
+			path = new Path(4);
+			path
+				.to(353, 59)
+				.to(286, 89)
+				.to(233, 159)
+				.to(215, 250)
+			;
+		} else if (source == Location.EGYPT && dest == Location.TURKEY) {
+			path = new Path(4);
+			path
+				.to(215, 250)
+				.to(233, 159)
+				.to(286, 89)
+				.to(353, 59)
+			;
+		}
+		return path;
+	}
+
+	@Override
+	public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+		
+	}
+
+	@Override
+	public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+		ButtonSprite srcButton = (ButtonSprite) mTravelScene.getChildByTag(mPlayerLoc);
+		ButtonSprite dstButton = (ButtonSprite) mTravelScene.getChildByTag(mDestLoc);
+		mPlayerLoc = mDestLoc;
+		srcButton.setEnabled(true);
+		srcButton.setCurrentTileIndex(0);
+		dstButton.setEnabled(false);
+		dstButton.setCurrentTileIndex(1);
+		//mGame.getPlayer().setLocation(mDestLoc);
+		
 	}
 
 }
