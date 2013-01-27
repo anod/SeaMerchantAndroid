@@ -1,7 +1,6 @@
 package com.example.seamerchant.scene;
 
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
 import org.andengine.entity.sprite.Sprite;
@@ -14,6 +13,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import com.example.seamerchant.andengine.AEUtils;
+import com.example.seamerchant.game.Game;
 import com.example.seamerchant.game.Location;
 
 public class Travel extends Main implements OnClickListener {
@@ -26,9 +26,11 @@ public class Travel extends Main implements OnClickListener {
 	
 	private Scene mTravelScene;
 	private Sprite mBoatSprite;
+	private Game mGame;
 	
-	public Travel(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner) {
+	public Travel(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner, Game game) {
 		super(baseActivity, sideBanner, lowerBanner);
+		mGame = game;
 	}
 
 	@Override
@@ -37,26 +39,29 @@ public class Travel extends Main implements OnClickListener {
 		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
 		mTravelScene.attachChild(backgroundSprite);
 		
-		final ButtonSprite israelItem = new ButtonSprite(516, 253, mLocIsraelTextureRegion, getVertexBufferObjectManager(), this);
-		israelItem.setTag(Location.ISRAEL);
-		mTravelScene.registerTouchArea(israelItem);
-		mTravelScene.attachChild(israelItem);
-		
-		final ButtonSprite turkeyItem = new ButtonSprite(344, 4, mLocTurkeyTextureRegion, getVertexBufferObjectManager(), this);
-		turkeyItem.setTag(Location.TURKEY);
-		mTravelScene.registerTouchArea(turkeyItem);
-		mTravelScene.attachChild(turkeyItem);
-		
-		final ButtonSprite egyptItem = new ButtonSprite(179, 298, mLocEgyptTextureRegion, getVertexBufferObjectManager(), this);
-		egyptItem.setTag(Location.EGYPT);
-		mTravelScene.registerTouchArea(egyptItem);
-		mTravelScene.attachChild(egyptItem);
-		
+		int selectedLoc = mGame.getPlayer().getLocation();
+
+		createButtonSprite(516, 253, mLocIsraelTextureRegion, Location.ISRAEL, selectedLoc);
+		createButtonSprite(344, 4, mLocTurkeyTextureRegion, Location.TURKEY, selectedLoc);
+		createButtonSprite(179, 298, mLocEgyptTextureRegion, Location.EGYPT, selectedLoc);
+
 		mBoatSprite = new Sprite(471, 217, mBoatTextureRegion, getVertexBufferObjectManager());
 		mTravelScene.attachChild(mBoatSprite);
 		
 		
 		return mTravelScene;
+	}
+
+	private ButtonSprite createButtonSprite(int x, int y, ITiledTextureRegion tr, int locId, int selectedLoc) {
+		final ButtonSprite item = new ButtonSprite(x, y, tr, getVertexBufferObjectManager(), this);
+		item.setTag(locId);
+		mTravelScene.registerTouchArea(item);
+		mTravelScene.attachChild(item);
+		if (selectedLoc == locId) {
+			item.setEnabled(false);
+			item.setCurrentTileIndex(1);
+		}
+		return item;
 	}
 
 	@Override
@@ -82,8 +87,7 @@ public class Travel extends Main implements OnClickListener {
 
 	@Override
 	public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		
-		
+		int dest = pButtonSprite.getTag();
 	}
 
 }

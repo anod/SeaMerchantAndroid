@@ -126,7 +126,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 
 	private void startTravelScene() {
-		final Travel tl = new Travel(mBaseActivity, mSideBanner, mLowerBanner);
+		final Travel tl = new Travel(mBaseActivity, mSideBanner, mLowerBanner, mGame);
 		tl.loadResourcesAndScene();
 		mEngine.setScene(tl.getScene());
 	}
