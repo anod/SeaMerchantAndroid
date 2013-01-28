@@ -55,8 +55,20 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 		mIsraelButton = createButtonSprite(516, 253, mLocIsraelTextureRegion, Location.ISRAEL, mPlayerLoc);
 		mTurkeyButton = createButtonSprite(344, 4, mLocTurkeyTextureRegion, Location.TURKEY, mPlayerLoc);
 		mEgyptButton = createButtonSprite(179, 298, mLocEgyptTextureRegion, Location.EGYPT, mPlayerLoc);
-
-		mBoatSprite = new Sprite(471, 217, mBoatTextureRegion, getVertexBufferObjectManager());
+		switch (mPlayerLoc) {
+		case Location.ISRAEL:
+			mBoatSprite = new Sprite(471, 217, mBoatTextureRegion, getVertexBufferObjectManager());
+			break;
+		case Location.TURKEY:
+			mBoatSprite = new Sprite(353, 59, mBoatTextureRegion, getVertexBufferObjectManager());
+			break;
+		case Location.EGYPT:
+			mBoatSprite = new Sprite(215, 250, mBoatTextureRegion, getVertexBufferObjectManager());
+			break;
+		default:
+			break;
+		}
+		
 		mTravelScene.attachChild(mBoatSprite);
 
 		return mTravelScene;
@@ -99,7 +111,19 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 	public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		mDestLoc = pButtonSprite.getTag();
 		Path path = getBoatPath(mPlayerLoc, mDestLoc);
-		mBoatSprite.registerEntityModifier(new PathModifier(10, path, this));
+		if(mGame.canTravel()){
+			mBoatSprite.registerEntityModifier(new PathModifier(10, path, this));
+		}
+		else{ // should never be here.
+			showTooLateMsg();
+			this.detachSelf(); // TODO: would this work?
+			mGame.travel(mPlayerLoc, mDestLoc);
+		}
+	}
+
+	private void showTooLateMsg() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private Path getBoatPath(int source, int dest) {
@@ -165,12 +189,18 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 	public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
 		ButtonSprite srcButton = (ButtonSprite) mTravelScene.getChildByTag(mPlayerLoc);
 		ButtonSprite dstButton = (ButtonSprite) mTravelScene.getChildByTag(mDestLoc);
-		mPlayerLoc = mDestLoc;
 		srcButton.setEnabled(true);
 		srcButton.setCurrentTileIndex(0);
 		dstButton.setEnabled(false);
 		dstButton.setCurrentTileIndex(1);
-		//mGame.getPlayer().setLocation(mDestLoc);
+		showArrivedMsg(mDestLoc);
+		this.detachSelf(); // TODO: would this work?
+		mGame.travel(mPlayerLoc, mDestLoc);
+		
+	}
+
+	private void showArrivedMsg(int DestLoction) {
+		// TODO show the message of arrival
 		
 	}
 

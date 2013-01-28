@@ -26,7 +26,7 @@ public class Game {
 	public interface OnGameChangeListener {
 		void onPiratesAttack();
 		void onGameFinish();
-		//TODO: more
+		void onTravelEnded();
 		
 	}
 	
@@ -173,8 +173,15 @@ public class Game {
 			return true;
 		return false;
 	}
-	public void travel(int travelType)
+	public void travel(int startLocation,int endLocation)
 	{
+		int travelType = 0;
+		if(startLocation >= endLocation) // a trick
+			travelType = startLocation - endLocation;
+		else
+			travelType = endLocation - startLocation;
 		mTravelTimes += travelType;
+		mPlayer.setLocation(endLocation);
+		mListener.onTravelEnded();
 	}
 }

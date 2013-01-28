@@ -284,4 +284,10 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		mGame.sellItem(item, count);
 		setCurrentScene(SceneType.OPTIONS);
 		sell.detachAndUnload();	}
+
+	@Override
+	public void onTravelEnded() {
+		setCurrentScene(SceneType.OPTIONS);
+		
 	}
+}
