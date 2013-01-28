@@ -122,7 +122,7 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 	}
 
 	private void showTooLateMsg() {
-		// TODO Auto-generated method stub
+		// TODO for future addition of smaller time slices
 		
 	}
 

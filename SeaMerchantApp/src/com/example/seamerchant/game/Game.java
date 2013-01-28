@@ -173,6 +173,9 @@ public class Game {
 			return true;
 		return false;
 	}
+	public int travelTime(){
+		return mTravelTimes;
+	}
 	public void travel(int startLocation,int endLocation)
 	{
 		int travelType = 0;

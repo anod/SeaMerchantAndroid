@@ -29,6 +29,7 @@ public class SideBanner extends Base {
 	private Text mWheat;
 	private Text mOlives;
 	private Text mBronze;
+	private Text mTime;
 	private TiledSprite mCurrentDay;
 	
 	public SideBanner(SimpleBaseGameActivity baseActivity, Game game) {
@@ -54,7 +55,27 @@ public class SideBanner extends Base {
 	    int currentDayIndex = 7 - mGame.getCurrentDay();
 		mCurrentDay.setCurrentTileIndex(currentDayIndex);
 	    scene.attachChild(mCurrentDay);
+	    mTime = new Text(OFFSET_LEFT+30, 68, this.mFont, setTime(), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+	    scene.attachChild(mTime);
 	    return scene;
+	}
+
+	private String setTime() {
+		switch (mGame.travelTime()) {
+		case 0:
+			return "08:00";
+		case 1:
+			return "12:00";		
+		case 2:
+			return "16:00";
+		case 3:
+			return "20:00";
+		case 4:
+			return "24:00";
+		default:
+			break;
+		}
+		return null;
 	}
 
 	@Override
@@ -87,6 +108,7 @@ public class SideBanner extends Base {
 		mWheat.setText(mGame.getPlayer().getWheat().getCount() + "");
 		mOlives.setText(mGame.getPlayer().getOlives().getCount() + "");
 		mBronze.setText(mGame.getPlayer().getBronze().getCount() + "");
+		mTime.setText(setTime());
 	}
 
 }
