@@ -1,5 +1,8 @@
 package com.example.seamerchant;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -7,6 +10,8 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import com.example.seamerchant.game.Game;
+import com.example.seamerchant.game.ScoreHandler;
+import com.example.seamerchant.game.Scores;
 import com.example.seamerchant.game.Game.OnGameChangeListener;
 import com.example.seamerchant.game.PricedItem;
 import com.example.seamerchant.scene.Base;
@@ -14,7 +19,9 @@ import com.example.seamerchant.scene.Base.OnActionDownListener;
 import com.example.seamerchant.scene.Buy;
 import com.example.seamerchant.scene.Buy.OnBuyItemListener;
 import com.example.seamerchant.scene.EndDay;
+import com.example.seamerchant.scene.EndGame;
 import com.example.seamerchant.scene.GameStart;
+import com.example.seamerchant.scene.HighScore;
 import com.example.seamerchant.scene.LowerBanner;
 import com.example.seamerchant.scene.NewDay;
 import com.example.seamerchant.scene.Options;
@@ -36,6 +43,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	protected LowerBanner mLowerBanner;
 	private SceneType mCurrentType;
 	private Game mGame;
+	private ArrayList<Scores> mHighScores;
 
 	public enum SceneType
 	{
@@ -50,7 +58,9 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		PIRATERESULT,
 		NEXTDAY,
 		REST,
-		TRAVEL
+		TRAVEL,
+		HIGHSCORE,
+		ENDGAME
 	}
 
 	public SceneManager(Game game, SimpleBaseGameActivity baseActivity) {
@@ -61,6 +71,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		mGame.setGameChangeListener(this);
 		mSideBanner = new SideBanner(mBaseActivity,mGame);
 		mLowerBanner = new LowerBanner(mBaseActivity,mGame);
+		
 	}
 
 	public Scene getWelcomeScene() {
@@ -104,26 +115,46 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		case BUY:
 			startBuyScene();
 			break;
-		case PIRATERESULT:
-			break;
-		case PIRATES:
-			break;
 		case SELL:
 			startSellScene();
 			break;
-		case NEXTDAY:
-			startNextDayScene();
-			break;
+		//case NEXTDAY:
+			//startNextDayScene();
+		//	break;
 		case REST:
 			startRestScene();
 			break;
 		case TRAVEL:
 			startTravelScene();
+		case HIGHSCORE:
+			startHighScoreScene();
+		case ENDGAME:
+			startEndGameScene();
 		default:
 			break;
 		}
 	}
 
+
+	private void startEndGameScene() {
+		final EndGame eg = new EndGame(mBaseActivity, mGame.getPlayer().getMoney(),mHighScores);
+		eg.loadResourcesAndScene();
+		mEngine.setScene(eg.getScene());
+		eg.setOnActionDown(new OnActionDownListener() {
+			@Override
+			public void onAcionDown(Base base) {
+				eg.showAnotherGameMessage();
+				eg.detachAndUnload();
+			}
+		});
+	}
+
+	private void startHighScoreScene() {
+		final HighScore hs = new HighScore(mBaseActivity, mGame);
+		hs.loadResourcesAndScene();
+		mEngine.setScene(hs.getScene());
+		
+	}
 
 	private void startTravelScene() {
 		final Travel tl = new Travel(mBaseActivity, mSideBanner, mLowerBanner, mGame);
@@ -149,28 +180,28 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		rt.setOnActionDown(new OnActionDownListener() {
 			@Override
 			public void onAcionDown(Base base) {
-				mGame.nextDay();
+				rt.detachAndUnload(); 
 				setCurrentScene(SceneType.NEWDAY);
-				rt.detachAndUnload();
+
 			}
 		});
 		
 	}
 
-	private void startNextDayScene() {
-		final Base ed = new EndDay(mBaseActivity);
-		ed.loadResourcesAndScene();
-		mEngine.setScene(ed.getScene());
-		ed.setOnActionDown(new OnActionDownListener() {
-			@Override
-			public void onAcionDown(Base base) {
-				mGame.nextDay();
-				setCurrentScene(SceneType.NEWDAY);
-				ed.detachAndUnload();
-			}
-		});
-
-	}
+//	private void startNextDayScene() {
+//		final Base ed = new EndDay(mBaseActivity);
+//		ed.loadResourcesAndScene();
+//		mEngine.setScene(ed.getScene());
+//		ed.setOnActionDown(new OnActionDownListener() {
+//			@Override
+//			public void onAcionDown(Base base) {
+//				mGame.nextDay();
+//				setCurrentScene(SceneType.NEWDAY);
+//				ed.detachAndUnload();
+//			}
+//		});
+//
+//	}
 
 	private void startOptionsScene() {
 		final Options op = new Options(mBaseActivity, mSideBanner, mLowerBanner);
@@ -230,8 +261,9 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	public void onOptionClick(final Options options, int option) {
 		switch (option) {
 		case Options.MENU_REST:
-			setCurrentScene(SceneType.REST);
 			options.detachAndUnload();
+			if(mGame.nextDay())
+				setCurrentScene(SceneType.REST);
 			break;
 		case Options.MENU_BUY:
 			// TODO consider adding a message for buying if you have no money
@@ -259,16 +291,29 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 			break;
 		}
 	}
-
 	@Override
-	public void onPiratesAttack() {
-		// TODO Auto-generated method stub
+	public void onGameFinish() {
+		mHighScores= ScoreHandler.getScoreFileContents(mBaseActivity.getApplicationContext());
+		int lowest = 0;
+		if (!mHighScores.isEmpty()) {
+			lowest = mHighScores.get(mHighScores.size()-1).getScore();
+			}
+		//if(lowest < mGame.getPlayer().getMoney()){
+		//	setCurrentScene(SceneType.HIGHSCORE);
+			addPlayerScore("zimbler");
+		//}
+		//else{
+			setCurrentScene(SceneType.ENDGAME);
+			
+		//}
 		
 	}
 
-	@Override
-	public void onGameFinish() {
-		// TODO Auto-generated method stub
+	private void addPlayerScore(String name) {
+		Scores newScore = new Scores(name, mGame.getPlayer().getMoney());
+		newScore.writeScore(mBaseActivity.getApplicationContext());
+		mHighScores.add(newScore);
+		Collections.sort(mHighScores);
 		
 	}
 

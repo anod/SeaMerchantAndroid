@@ -50,7 +50,7 @@ public class AEUtils {
 			baseActivity.getTextureManager(), 
 			256, 256, 
 			Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD), 
-			30,
+			28,
 			Color.rgb(173, 88, 29)
 		);
 	}

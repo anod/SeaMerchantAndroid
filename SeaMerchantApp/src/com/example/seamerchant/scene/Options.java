@@ -128,7 +128,7 @@ public class Options extends Main implements OnClickListener {
 	public void showNoGoodsMessage() {
 		final Sprite noGoods = new Sprite(39, 260, mNoGoods, getVertexBufferObjectManager());
 		mOptionsScene.attachChild(noGoods);
-		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+		mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() {
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				noGoods.detachSelf();
@@ -138,7 +138,7 @@ public class Options extends Main implements OnClickListener {
 	public void showCantTravelMessage() {
 		final Sprite cantTravel = new Sprite(39, 260, mCantTravel, getVertexBufferObjectManager());
 		mOptionsScene.attachChild(cantTravel);
-		mEngine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback() {
+		mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() {
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				cantTravel.detachSelf();

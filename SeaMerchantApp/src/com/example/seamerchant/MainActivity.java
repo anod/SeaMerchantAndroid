@@ -9,6 +9,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import com.example.seamerchant.game.Game;
 
+import android.content.Context;
 import android.os.Bundle;
 
 public class MainActivity extends SimpleBaseGameActivity {
@@ -41,6 +42,13 @@ public class MainActivity extends SimpleBaseGameActivity {
 	protected Scene onCreateScene() {
 		
 		return mSceneManager.getWelcomeScene();
+	}
+	@Override
+	public void onBackPressed()
+	{
+		// this overrides the regular action for back which quits the game 
+		// and actually effctably turn off the back button
+		// TODO handle it in some way.
 	}
 
 }

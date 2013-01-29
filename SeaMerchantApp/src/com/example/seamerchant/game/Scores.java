@@ -12,7 +12,7 @@ public class Scores implements Comparable<Scores> {
 	private int mScore;
 	public Scores(String name,int score) {
 		mName = name;
-		Score(score);
+		mScore = score;
 
 	}
 	
@@ -20,7 +20,7 @@ public class Scores implements Comparable<Scores> {
 		DataOutputStream out;
 		try {
 		    out = new DataOutputStream(ctx.openFileOutput(FILENAME, Context.MODE_APPEND));
-	        out.writeInt(Score());
+	        out.writeInt(getScore());
 		    out.writeChar(' ');
 	        out.writeUTF(mName);
 	        out.close();
@@ -29,16 +29,20 @@ public class Scores implements Comparable<Scores> {
 	}
 	@Override
 	public int compareTo(Scores another) {
-		if(this.Score() > another.Score())
+		if(this.getScore() > another.getScore())
 			return 1;
 		return -1;
 	}
 
-	public int Score() {
+	public Integer getScore() {
 		return mScore;
 	}
 
-	public void Score(int mScore) {
-		this.mScore = mScore;
+	public void setScore(int score) {
+		this.mScore = score;
+	}
+
+	public String getName() {
+		return mName;
 	}
 }

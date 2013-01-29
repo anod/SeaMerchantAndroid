@@ -1,5 +1,6 @@
 package com.example.seamerchant.game;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -24,9 +25,8 @@ public class Game {
 	
 	
 	public interface OnGameChangeListener {
-		void onPiratesAttack();
-		void onGameFinish();
 		void onTravelEnded();
+		void onGameFinish();
 		
 	}
 	
@@ -36,12 +36,6 @@ public class Game {
 		mLocTurkey = new Location(Location.TURKEY);
 		mLocEgypt = new Location(Location.EGYPT);
 		mWeather = new Weather();
-		init();
-	}
-	
-	private void init() {
-		//setWeather();
-		//setPrices();
 	}
 
 	public Player getPlayer() {
@@ -62,10 +56,6 @@ public class Game {
 		return Weather.CALM;
 	}
 	
-	/**
-	 * TODO: Check what it means.
-	 * ?
-	 */
 	private void setWeather()
 	{
 		mWeather.makeWeather();
@@ -107,15 +97,16 @@ public class Game {
 		return getLocation(mPlayer.getLocation());
 	}
 	
-	public void nextDay() {
+	public boolean nextDay() {
 		if (mCurrentDay == LAST_DAY) {
 			finish();
-			return;
+			return false;
 		}
 		mCurrentDay++;
 		setWeather();
 		setPrices();
 		mTravelTimes = 0;
+		return true;
 	}
 
 	private void setPrices() {
