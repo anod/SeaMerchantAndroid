@@ -117,8 +117,9 @@ public class Buy extends Main implements OnClickListener, OnNumKeyboardUpdateLis
 		pButtonSprite.setCurrentTileIndex(1);
 		int itemId = pButtonSprite.getTag();
 		mSelectedItem = mGame.getCurrentLocation().getItem(itemId);
-		int purchasable = (int)(mGame.getPlayer().getMoney() / mSelectedItem.getPrice());
-		mPurchasableCount = Math.min(mSelectedItem.getCount(), purchasable);
+		//int purchasable = (int)(mGame.getPlayer().getMoney() / mSelectedItem.getPrice());
+		//mPurchasableCount = Math.min(mSelectedItem.getCount(), purchasable);
+		mPurchasableCount = (int)(mGame.getPlayer().getMoney() / mSelectedItem.getPrice());
 		Debug.d("Money: "+mGame.getPlayer().getMoney()+", Price: "+mSelectedItem.getPrice()+", Available:" + mPurchasableCount);
 		//mAvailableText.setText(mSelectedItem.getCount() + "");
 		mAvailableText.setText(mPurchasableCount + "");

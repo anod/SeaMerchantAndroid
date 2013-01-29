@@ -15,6 +15,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import com.example.seamerchant.andengine.AEUtils;
 import com.example.seamerchant.game.Game;
+import com.example.seamerchant.game.Location;
 
 public class SideBanner extends Base {
 
@@ -30,6 +31,7 @@ public class SideBanner extends Base {
 	private Text mOlives;
 	private Text mBronze;
 	private Text mTime;
+	private Text mCurrentLocation;
 	private TiledSprite mCurrentDay;
 	
 	public SideBanner(SimpleBaseGameActivity baseActivity, Game game) {
@@ -57,7 +59,23 @@ public class SideBanner extends Base {
 	    scene.attachChild(mCurrentDay);
 	    mTime = new Text(OFFSET_LEFT+30, 68, this.mFont, setTime(), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
 	    scene.attachChild(mTime);
+	    mCurrentLocation = new Text(OFFSET_LEFT+30, 0, this.mFont, setLocationString(), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+	    scene.attachChild(mCurrentLocation);
 	    return scene;
+	}
+
+	private String setLocationString() {
+		switch (mGame.getPlayer().getLocation()) {
+		case Location.EGYPT:
+			return "םיירצמ";
+		case Location.TURKEY:
+			return "היכרות";
+		case Location.ISRAEL:
+			return "לארשי";
+		default:
+			break;
+		}
+		return null;
 	}
 
 	private String setTime() {
