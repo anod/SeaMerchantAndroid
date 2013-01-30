@@ -52,6 +52,7 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 		
 		mPlayerLoc = mGame.getPlayer().getLocation();
 
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		mIsraelButton = createButtonSprite(516, 253, mLocIsraelTextureRegion, Location.ISRAEL, mPlayerLoc);
 		mTurkeyButton = createButtonSprite(344, 4, mLocTurkeyTextureRegion, Location.TURKEY, mPlayerLoc);
 		mEgyptButton = createButtonSprite(179, 298, mLocEgyptTextureRegion, Location.EGYPT, mPlayerLoc);

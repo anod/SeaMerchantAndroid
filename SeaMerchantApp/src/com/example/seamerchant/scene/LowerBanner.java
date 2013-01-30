@@ -2,8 +2,13 @@ package com.example.seamerchant.scene;
 
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.Font;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.DrawType;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
@@ -25,6 +30,13 @@ public class LowerBanner extends Base {
 	private Text mItemEgypt;
 	private Text mItemIsrael;
 	private Text mItemTurkey;
+	private BitmapTextureAtlas mItemTexture;
+	private ITiledTextureRegion mLocIsraelTextureRegion;
+	private ITiledTextureRegion mLocTurkeyTextureRegion;
+	private ITiledTextureRegion mLocEgyptTextureRegion;
+	private TiledSprite mTitleTurkey;
+	private TiledSprite mTitleIsrael;
+	private TiledSprite mTitleEgypt;
 	
 	public LowerBanner(SimpleBaseGameActivity baseActivity,Game game) {
 		super(baseActivity);
@@ -39,8 +51,18 @@ public class LowerBanner extends Base {
 	    setPriceTexts(scene,Item.BRONZE,37);
 	    setPriceTexts(scene,Item.OLIVES,70);
 	    setPriceTexts(scene,Item.WHEAT,106);
+	    
+	    mTitleTurkey = new TiledSprite(629, 349, mLocTurkeyTextureRegion, getVertexBufferObjectManager());
+	    scene.attachChild(mTitleTurkey);
+	    mTitleIsrael = new TiledSprite(368, 349, mLocIsraelTextureRegion, getVertexBufferObjectManager());
+	    scene.attachChild(mTitleIsrael);
+	    mTitleEgypt = new TiledSprite(140, 349, mLocEgyptTextureRegion, getVertexBufferObjectManager());
+	    scene.attachChild(mTitleEgypt);
+	    
+	    updateSelectedLocation();
 	    return scene;
 	}
+
 
 	private void setPriceTexts(Scene scene, int type,int offsetTop) {
 		// there must be a better way to do this.
@@ -58,7 +80,9 @@ public class LowerBanner extends Base {
 
 	@Override
 	protected void unloadResources() {
-
+		mItemTexture.unload();
+		mFont.unload();
+		mBgTextureRegion.getTexture().unload();
 	}
 
 	@Override
@@ -68,8 +92,16 @@ public class LowerBanner extends Base {
 		}
 		
 		mBgTextureRegion = AEUtils.createTextureRegionFromAssets("gfx/lowerbg.png", mBaseActivity);
+		
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		mItemTexture = new BitmapTextureAtlas(this.getTextureManager(), 128, 256, TextureOptions.BILINEAR);
+		mLocTurkeyTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "lower_turkey.png", 0,  0, 1, 2);
+		mLocEgyptTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "lower_egypt.png", 0, 56, 1, 2);
+		mLocIsraelTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "lower_israel.png",  0, 112, 1, 2);
+		
 		mFont = AEUtils.createGameFont(mBaseActivity);
 	    mFont.load();
+	    mItemTexture.load();
 	}
 
 	@Override
@@ -79,9 +111,10 @@ public class LowerBanner extends Base {
 	}
 
 	public void refresh() {
-			refreshPrices(Item.BRONZE);
-			refreshPrices(Item.OLIVES);
-			refreshPrices(Item.WHEAT);
+		refreshPrices(Item.BRONZE);
+		refreshPrices(Item.OLIVES);
+		refreshPrices(Item.WHEAT);
+		updateSelectedLocation();
 	}
 
 	private void refreshPrices(int type) {
@@ -91,5 +124,22 @@ public class LowerBanner extends Base {
 		mItemIsrael.setText(item.getPrice().toString());
 		item = (PricedItem) mGame.getLocation(Location.TURKEY).getItem(type);
 		mItemTurkey.setText(item.getPrice().toString());
+	}
+
+	private void updateSelectedLocation() {
+		int loc = mGame.getPlayer().getLocation();
+		if (loc == Location.EGYPT) {
+			mTitleEgypt.setCurrentTileIndex(1);
+			mTitleIsrael.setCurrentTileIndex(0);
+			mTitleTurkey.setCurrentTileIndex(0);
+		} else if (loc == Location.ISRAEL) {
+			mTitleEgypt.setCurrentTileIndex(0);
+			mTitleIsrael.setCurrentTileIndex(1);
+			mTitleTurkey.setCurrentTileIndex(0);
+		} else {
+			mTitleEgypt.setCurrentTileIndex(0);
+			mTitleIsrael.setCurrentTileIndex(0);
+			mTitleTurkey.setCurrentTileIndex(1);
+		}
 	}
 }
