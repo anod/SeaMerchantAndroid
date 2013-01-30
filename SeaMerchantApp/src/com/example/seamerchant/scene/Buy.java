@@ -109,6 +109,7 @@ public class Buy extends Main implements OnClickListener, OnNumKeyboardUpdateLis
 		mBgTextureRegion.getTexture().unload();
 		mItemTexture.unload();
 		mNumKeyboard.unloadResources();
+		mFont.unload();
 	}
 
 	@Override

@@ -7,10 +7,9 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
-import com.example.seamerchant.game.Game;
-
-import android.content.Context;
 import android.os.Bundle;
+
+import com.example.seamerchant.game.Game;
 
 public class MainActivity extends SimpleBaseGameActivity {
 	private static int CAMERA_WIDTH = 800;

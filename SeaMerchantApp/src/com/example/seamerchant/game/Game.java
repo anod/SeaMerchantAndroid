@@ -1,6 +1,5 @@
 package com.example.seamerchant.game;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -27,15 +26,21 @@ public class Game {
 	public interface OnGameChangeListener {
 		void onTravelEnded();
 		void onGameFinish();
-		
+		void onGameRestart();
 	}
 	
 	public Game() {
+		init();
+	}
+
+	private void init() {
 		mPlayer = new Player(0, Location.ISRAEL);
 		mLocIsrael = new Location(Location.ISRAEL);
 		mLocTurkey = new Location(Location.TURKEY);
 		mLocEgypt = new Location(Location.EGYPT);
 		mWeather = new Weather();
+		mCurrentDay = 0;
+		mStormyWeather = 0;
 	}
 
 	public Player getPlayer() {
@@ -177,5 +182,11 @@ public class Game {
 		mTravelTimes += travelType;
 		mPlayer.setLocation(endLocation);
 		mListener.onTravelEnded();
+	}
+
+	public void restart() {
+		init();
+		nextDay();
+		mListener.onGameRestart();
 	}
 }

@@ -107,6 +107,7 @@ public class SideBanner extends Base {
 		mItemTexture.unload();
 		mBgTextureRegion.getTexture().unload();
 		mFont.unload();
+		mBgTextureRegion = null;
 	}
 
 	@Override

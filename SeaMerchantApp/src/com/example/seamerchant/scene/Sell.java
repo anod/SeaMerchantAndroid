@@ -108,6 +108,7 @@ public class Sell extends Main implements OnClickListener, OnNumKeyboardUpdateLi
 		mBgTextureRegion.getTexture().unload();
 		mItemTexture.unload();
 		mNumKeyboard.unloadResources();
+		mFont.unload();
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package com.example.seamerchant;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.IOnSceneTouchListener;
@@ -10,16 +9,16 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import com.example.seamerchant.game.Game;
-import com.example.seamerchant.game.ScoreHandler;
-import com.example.seamerchant.game.Scores;
 import com.example.seamerchant.game.Game.OnGameChangeListener;
 import com.example.seamerchant.game.PricedItem;
+import com.example.seamerchant.game.ScoreHandler;
+import com.example.seamerchant.game.Scores;
 import com.example.seamerchant.scene.Base;
 import com.example.seamerchant.scene.Base.OnActionDownListener;
 import com.example.seamerchant.scene.Buy;
 import com.example.seamerchant.scene.Buy.OnBuyItemListener;
-import com.example.seamerchant.scene.EndDay;
 import com.example.seamerchant.scene.EndGame;
+import com.example.seamerchant.scene.EndGame.OnEndDialogClickListener;
 import com.example.seamerchant.scene.GameStart;
 import com.example.seamerchant.scene.HighScore;
 import com.example.seamerchant.scene.LowerBanner;
@@ -41,9 +40,8 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	private Welcome mWelcomeGameScene;
 	protected SideBanner mSideBanner;
 	protected LowerBanner mLowerBanner;
-	private SceneType mCurrentType;
 	private Game mGame;
-	private ArrayList<Scores> mHighScores;
+	private ArrayList<Scores> mHighScores = new ArrayList<Scores>();
 
 	public enum SceneType
 	{
@@ -71,7 +69,6 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		mGame.setGameChangeListener(this);
 		mSideBanner = new SideBanner(mBaseActivity,mGame);
 		mLowerBanner = new LowerBanner(mBaseActivity,mGame);
-		
 	}
 
 	public Scene getWelcomeScene() {
@@ -94,7 +91,6 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	
 	//Method allows you to set the currently active scene
 	private void setCurrentScene(SceneType scene) {
-		mCurrentType = scene;
 		switch (scene)
 		{
 		case WELCOME:
@@ -143,6 +139,24 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		final EndGame eg = new EndGame(mBaseActivity, mGame.getPlayer().getMoney(),mHighScores);
 		eg.loadResourcesAndScene();
 		mEngine.setScene(eg.getScene());
+		eg.setOnEndDialogClickListener(new OnEndDialogClickListener() {
+			@Override
+			public void onDialogClick(boolean result, EndGame endGame) {
+				eg.detachAndUnload(); 
+				if (result) {
+					mGame.restart();
+				} else {
+					mBaseActivity.finish();
+				}
+			}
+		});
+		
+		eg.setOnActionDown(new OnActionDownListener() {
+			@Override
+			public void onAcionDown(Base base) {
+				eg.showAnotherGameMessage();
+			}
+		});
 	}
 
 	private void startHighScoreScene() {
@@ -289,11 +303,11 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	}
 	@Override
 	public void onGameFinish() {
-		mHighScores= ScoreHandler.getScoreFileContents(mBaseActivity.getApplicationContext());
+		mHighScores = ScoreHandler.getScoreFileContents(mBaseActivity.getApplicationContext());
 		int lowest = 0;
 		if (!mHighScores.isEmpty()) {
 			lowest = mHighScores.get(mHighScores.size()-1).getScore();
-			}
+		}
 		//if(lowest < mGame.getPlayer().getMoney()){
 		//	setCurrentScene(SceneType.HIGHSCORE);
 			addPlayerScore("zimbler");
@@ -309,7 +323,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		Scores newScore = new Scores(name, mGame.getPlayer().getMoney());
 		newScore.writeScore(mBaseActivity.getApplicationContext());
 		mHighScores.add(newScore);
-		Collections.sort(mHighScores);
+		ScoreHandler.sort(mHighScores);
 		
 	}
 
@@ -331,4 +345,10 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		setCurrentScene(SceneType.OPTIONS);
 		
 	}
+
+	@Override
+	public void onGameRestart() {
+		setCurrentScene(SceneType.NEWDAY);
+	}
+
 }

@@ -56,7 +56,7 @@ public class LowerBanner extends Base {
 	    scene.attachChild(mTitleTurkey);
 	    mTitleIsrael = new TiledSprite(368, 349, mLocIsraelTextureRegion, getVertexBufferObjectManager());
 	    scene.attachChild(mTitleIsrael);
-	    mTitleEgypt = new TiledSprite(140, 349, mLocEgyptTextureRegion, getVertexBufferObjectManager());
+	    mTitleEgypt = new TiledSprite(120, 349, mLocEgyptTextureRegion, getVertexBufferObjectManager());
 	    scene.attachChild(mTitleEgypt);
 	    
 	    updateSelectedLocation();
@@ -83,6 +83,7 @@ public class LowerBanner extends Base {
 		mItemTexture.unload();
 		mFont.unload();
 		mBgTextureRegion.getTexture().unload();
+		mBgTextureRegion = null;
 	}
 
 	@Override
