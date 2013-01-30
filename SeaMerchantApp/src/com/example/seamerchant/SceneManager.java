@@ -126,10 +126,13 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 			break;
 		case TRAVEL:
 			startTravelScene();
+			break;
 		case HIGHSCORE:
 			startHighScoreScene();
+			break;
 		case ENDGAME:
 			startEndGameScene();
+			break;
 		default:
 			break;
 		}
@@ -276,8 +279,8 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 				options.showCantTravelMessage();
 			}
 			else{
-			setCurrentScene(SceneType.TRAVEL);
-			options.detachAndUnload();
+				setCurrentScene(SceneType.TRAVEL);
+				options.detachAndUnload();
 			}
 			break;
 		default:

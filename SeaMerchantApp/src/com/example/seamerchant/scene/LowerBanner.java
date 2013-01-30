@@ -4,13 +4,9 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.Font;
-import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.DrawType;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-
-import android.graphics.Color;
-import android.graphics.Typeface;
 
 import com.example.seamerchant.andengine.AEUtils;
 import com.example.seamerchant.game.Game;
