@@ -24,6 +24,7 @@ public class SideBanner extends Base {
 	private TextureRegion mBgTextureRegion;
 	private BitmapTextureAtlas mItemTexture;
 	private ITiledTextureRegion mDaysTextureRegion;
+	private ITiledTextureRegion mLocTextureRegion;
 	private Font mFont;
 	private Game mGame;
 	private Text mMoney;
@@ -31,7 +32,7 @@ public class SideBanner extends Base {
 	private Text mOlives;
 	private Text mBronze;
 	private Text mTime;
-	private Text mCurrentLocation;
+	private TiledSprite mCurrentLocation;
 	private TiledSprite mCurrentDay;
 	
 	public SideBanner(SimpleBaseGameActivity baseActivity, Game game) {
@@ -59,23 +60,28 @@ public class SideBanner extends Base {
 	    scene.attachChild(mCurrentDay);
 	    mTime = new Text(OFFSET_LEFT+30, 68, this.mFont, setTime(), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
 	    scene.attachChild(mTime);
-	    mCurrentLocation = new Text(OFFSET_LEFT+30, 0, this.mFont, setLocationString(), MAX_CHARS, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+	   
+	    mCurrentLocation = new TiledSprite(OFFSET_LEFT + 30, 3f, mLocTextureRegion, getVertexBufferObjectManager());
+	    setLocationString();
+	    
 	    scene.attachChild(mCurrentLocation);
 	    return scene;
 	}
 
-	private String setLocationString() {
+	private void setLocationString() {
 		switch (mGame.getPlayer().getLocation()) {
 		case Location.EGYPT:
-			return "םיירצמ";
+			mCurrentLocation.setCurrentTileIndex(1);
+			break;
 		case Location.TURKEY:
-			return "היכרות";
+			mCurrentLocation.setCurrentTileIndex(0);
+			break;
 		case Location.ISRAEL:
-			return "לארשי";
+			mCurrentLocation.setCurrentTileIndex(2);
+			break;
 		default:
 			break;
 		}
-		return null;
 	}
 
 	private String setTime() {
@@ -98,8 +104,9 @@ public class SideBanner extends Base {
 
 	@Override
 	protected void unloadResources() {
-		// TODO Auto-generated method stub
-		
+		mItemTexture.unload();
+		mBgTextureRegion.getTexture().unload();
+		mFont.unload();
 	}
 
 	@Override
@@ -110,8 +117,9 @@ public class SideBanner extends Base {
 		mBgTextureRegion = AEUtils.createTextureRegionFromAssets("gfx/sidebg.png", mBaseActivity);
 		mFont = AEUtils.createGameFont(mBaseActivity);
 	    mFont.load();
-	    mItemTexture = new BitmapTextureAtlas(this.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+	    mItemTexture = new BitmapTextureAtlas(this.getTextureManager(), 256, 128, TextureOptions.BILINEAR);
 		mDaysTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "gfx/days_text.png", 0, 0,1,7);
+		mLocTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "gfx/side_location.png", 90, 0,1,3);
 		mItemTexture.load();
 	}
 
@@ -127,6 +135,7 @@ public class SideBanner extends Base {
 		mOlives.setText(mGame.getPlayer().getOlives().getCount() + "");
 		mBronze.setText(mGame.getPlayer().getBronze().getCount() + "");
 		mTime.setText(setTime());
+		setLocationString();
 	}
 
 }
