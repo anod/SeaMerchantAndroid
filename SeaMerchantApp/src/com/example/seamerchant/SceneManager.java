@@ -140,13 +140,6 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		final EndGame eg = new EndGame(mBaseActivity, mGame.getPlayer().getMoney(),mHighScores);
 		eg.loadResourcesAndScene();
 		mEngine.setScene(eg.getScene());
-		eg.setOnActionDown(new OnActionDownListener() {
-			@Override
-			public void onAcionDown(Base base) {
-				eg.showAnotherGameMessage();
-				eg.detachAndUnload();
-			}
-		});
 	}
 
 	private void startHighScoreScene() {

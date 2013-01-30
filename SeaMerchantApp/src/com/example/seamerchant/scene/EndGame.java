@@ -10,6 +10,9 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.Font;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -30,8 +33,9 @@ public class EndGame extends FullScreen implements OnClickListener {
 	private Font mFont;
 	private Scene mEndGame;
 	private ITextureRegion mMessageText;
-	private ITiledTextureRegion mAnotherGame;
-	private ITiledTextureRegion mNoGame;
+	private ITiledTextureRegion mYesTextureRegion;
+	private ITiledTextureRegion mNoTextureRegion;
+	private BitmapTextureAtlas mObjectsTexture;
 	
 	public EndGame(SimpleBaseGameActivity baseActivity, int currScore,ArrayList<Scores> highScores) {
 		super(baseActivity);
@@ -60,9 +64,15 @@ public class EndGame extends FullScreen implements OnClickListener {
 	@Override
 	protected void loadResourcesImpl() {
 		mBgTextureRegion = AEUtils.createTextureRegionFromAssets("gfx/GameEnd.png", mBaseActivity);
-		mBgTextureRegion.getTexture().load();
 		mFont = AEUtils.createGameFont(mBaseActivity);
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		mObjectsTexture = new BitmapTextureAtlas(this.getTextureManager(), 1024, 512, TextureOptions.BILINEAR);
+		mYesTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mObjectsTexture, mBaseActivity, "btn_yes.png",    0,   0, 1, 2);
+		mNoTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mObjectsTexture, mBaseActivity, "btn_no.png",    0,   32, 1, 2);
+		mMessageText = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mObjectsTexture, mBaseActivity, "msg_anotherGame.png", 0, 64);
+		mBgTextureRegion.getTexture().load();
 		mFont.load();
+		mObjectsTexture.load();
 	}
 
 	@Override
@@ -74,16 +84,23 @@ public class EndGame extends FullScreen implements OnClickListener {
 	public void showAnotherGameMessage() {
 		final Sprite message = new Sprite(39, 260, mMessageText, getVertexBufferObjectManager());
 		mEndGame.attachChild(message);
-		final ButtonSprite yesButton = new ButtonSprite(113, 200, mAnotherGame, getVertexBufferObjectManager(),this);
+		final ButtonSprite yesButton = new ButtonSprite(100, 274, mYesTextureRegion, getVertexBufferObjectManager(),this);
 		yesButton.setTag(BTN_YES);
 		yesButton.setOnClickListener(this);
 		mEndGame.registerTouchArea(yesButton);
 		mEndGame.attachChild(yesButton);
-		final ButtonSprite noButton = new ButtonSprite(113, 200, mNoGame, getVertexBufferObjectManager(),this);
+		final ButtonSprite noButton = new ButtonSprite(113, 274, mNoTextureRegion, getVertexBufferObjectManager(),this);
 		yesButton.setTag(BTN_NO);
 		yesButton.setOnClickListener(this);
-		mEndGame.registerTouchArea(yesButton);
+		mEndGame.registerTouchArea(noButton);
 		mEndGame.attachChild(yesButton);
+		
+	}
+
+	@Override
+	public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX,
+			float pTouchAreaLocalY) {
+		// TODO Auto-generated method stub
 		
 	}
 }
