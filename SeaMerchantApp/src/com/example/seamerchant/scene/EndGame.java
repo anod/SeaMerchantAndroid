@@ -14,9 +14,11 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.vbo.DrawType;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import com.example.seamerchant.andengine.AEUtils;
+import com.example.seamerchant.game.ScoreHandler;
 import com.example.seamerchant.game.Scores;
 
 public class EndGame extends FullScreen implements OnClickListener {
@@ -50,9 +52,11 @@ public class EndGame extends FullScreen implements OnClickListener {
 		final Sprite backgroundSprite = new Sprite(0, 0, mBgTextureRegion, getVertexBufferObjectManager());
 		mEndGame.attachChild(backgroundSprite);
 		int offset = 0;
-		for (Scores score : mScoresList) {
-			final Text name = new Text(500, 73+offset, mFont, score.getName(), this.getVertexBufferObjectManager());
-			final Text number = new Text(200, 73+offset, mFont, score.getScore().toString(), this.getVertexBufferObjectManager());
+		for (int i = 0; i<10; i++){
+			final Text name = new Text(500, 73+offset, mFont, "", 100, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+			name.setTag(100+i);
+			final Text number = new Text(200, 73+offset, mFont, "", 7, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+			number.setTag(200+i);
 			mEndGame.attachChild(name);
 			mEndGame.attachChild(number);
 			offset +=37;
@@ -62,9 +66,6 @@ public class EndGame extends FullScreen implements OnClickListener {
 		return mEndGame;
 	}
 
-	public void attachScores() {
-		
-	}
 	
 	@Override
 	protected void loadResourcesImpl() {
@@ -113,5 +114,22 @@ public class EndGame extends FullScreen implements OnClickListener {
 
 	public void setOnEndDialogClickListener(OnEndDialogClickListener onEndDialogClickListener) {
 		mDialogClickListener = onEndDialogClickListener;
+	}
+
+	public void addScore(Scores newScore) {
+		mScoresList.add(newScore);
+		ScoreHandler.sort(mScoresList);
+		refreshScores();
+	}
+
+	private void refreshScores() {
+		for(int i=0; i< mScoresList.size(); i++) {
+			final Text name = (Text)mEndGame.getChildByTag(100+i);
+			final Text number = (Text)mEndGame.getChildByTag(200+i);
+			final Scores score = mScoresList.get(i);
+			name.setText(score.getName());
+			number.setText(score.getScore() + "");
+		}
+		
 	}
 }

@@ -92,6 +92,7 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 		mBgTextureRegion = AEUtils.createTextureRegionFromAssets("gfx/travel_bg.png", mBaseActivity);
 		
 		mItemTexture = new BitmapTextureAtlas(this.getTextureManager(), 512, 512, TextureOptions.BILINEAR);
+		mItemTexture.addEmptyTextureAtlasSource(0, 0, 512, 512);
 		mLocTurkeyTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "travel_turkey.png", 0,  0, 1, 2);
 		mLocEgyptTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "travel_egypt.png", 0, 84, 1, 2);
 		mLocIsraelTextureRegion  = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mItemTexture, mBaseActivity, "travel_israel.png",  96, 0, 1, 2);

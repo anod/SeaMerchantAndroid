@@ -29,5 +29,5 @@ desktop.ini
 .DS_Store
 
 SeaMerchantApp/.DS_Store
-
 SeaMerchantApp/gen/
+SeaMerchantApp/gen/com/example/seamerchant/R.java

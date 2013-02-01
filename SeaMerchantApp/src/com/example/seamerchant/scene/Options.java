@@ -87,11 +87,13 @@ public class Options extends Main implements OnClickListener {
 		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		mMenuTexture = new BitmapTextureAtlas(this.getTextureManager(), 1024, 512, TextureOptions.BILINEAR);
+		mMenuTexture.addEmptyTextureAtlasSource(0, 0, 1024, 512);
+
 		mMenuBuyTextureRegion    = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_buy.png",    0,   0, 1, 2);
 		mMenuSellTextureRegion   = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_sell.png",   0,  54, 1, 2);
 		mMenuTravelTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_travel.png", 0, 108, 1, 2);
 		mMenuRestTextureRegion   = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTexture, mBaseActivity, "choice_rest.png",   0, 162, 1, 2);
-
+		
 		mNoGoods = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "msg_no_goods.png", 0, 216);
 		mCantTravel = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTexture, mBaseActivity, "msg_canttravel.png", 0, 289);
 		mBgTextureRegion.getTexture().load();

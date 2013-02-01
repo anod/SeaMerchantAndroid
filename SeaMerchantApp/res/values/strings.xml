@@ -8,5 +8,8 @@
     <string name="exit_message">רוצה לצאת?</string>
     <string name="yes">כן</string>
     <string name="no">לא</string>
+    <string name="name_title">שם</string>
+    <string name="name_message">הכנס את השמך</string>
+    <string name="save">שמור</string>
 
 </resources>
