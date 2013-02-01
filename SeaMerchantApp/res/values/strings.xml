@@ -4,5 +4,9 @@
     <string name="app_name">SeaMerchant</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="exit_title">יציאה</string>
+    <string name="exit_message">רוצה לצאת?</string>
+    <string name="yes">כן</string>
+    <string name="no">לא</string>
 
 </resources>

@@ -7,6 +7,8 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.example.seamerchant.game.Game;
@@ -48,6 +50,18 @@ public class MainActivity extends SimpleBaseGameActivity {
 		// this overrides the regular action for back which quits the game 
 		// and actually effctably turn off the back button
 		// TODO handle it in some way.
+		new AlertDialog.Builder(this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle(R.string.exit_title)
+			.setMessage(R.string.exit_message)
+			.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			})
+			.setNegativeButton(R.string.no, null)
+			.show();
 	}
 
 }
