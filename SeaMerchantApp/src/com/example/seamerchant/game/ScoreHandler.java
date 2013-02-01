@@ -23,7 +23,7 @@ public class ScoreHandler {
 			try {
 				for (;;) {
 					int score = in.readInt();
-					in.read();
+					in.readChar();
 					String name = in.readUTF();
 					ret.add(new Scores(name, score));
 				}

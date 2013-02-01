@@ -3,10 +3,12 @@ package com.example.seamerchant.game;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import org.andengine.util.debug.Debug;
+
 import android.content.Context;
 
 public class Scores implements Comparable<Scores> {
-	public static final String FILENAME = "scores.xml";
+	public static final String FILENAME = "scores.lst";
 	private String mName;
 	private int mScore;
 
@@ -23,16 +25,18 @@ public class Scores implements Comparable<Scores> {
 			out.writeInt(getScore());
 			out.writeChar(' ');
 			out.writeUTF(mName);
+			out.flush();
 			out.close();
 		} catch (IOException e) {
+			Debug.e(e);
 		}
 	}
 
 	@Override
 	public int compareTo(Scores another) {
-		if (this.getScore() > another.getScore())
-			return 1;
-		return -1;
+		if (mScore > another.getScore())
+			return -1;
+		return 1;
 	}
 
 	public Integer getScore() {
