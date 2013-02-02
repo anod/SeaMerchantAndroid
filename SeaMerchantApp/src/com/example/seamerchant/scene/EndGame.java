@@ -61,7 +61,8 @@ public class EndGame extends FullScreen implements OnClickListener {
 			mEndGame.attachChild(number);
 			offset +=37;
 		}
-		
+		final Text score = new Text(50, 160, mFont, String.valueOf(mCurrScore), 100, getVertexBufferObjectManager(), DrawType.DYNAMIC);
+		mEndGame.attachChild(score);
 		mEndGame.setTouchAreaBindingOnActionDownEnabled(true);
 		return mEndGame;
 	}
