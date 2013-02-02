@@ -27,6 +27,9 @@ public class Game {
 		void onTravelEnded();
 		void onGameFinish();
 		void onGameRestart();
+		void onContinueTravel(int currX, int currY);
+		void onGameEventStormTossed(int currX, int currY);
+		void onGameEventStormBack(int currX, int currY);
 	}
 	
 	public Game() {
@@ -188,5 +191,21 @@ public class Game {
 		init();
 		nextDay();
 		mListener.onGameRestart();
+	}
+	public void randomTravelEvent(int start,int end,int currX,int currY)
+	{
+		Random rand = new Random();
+		// first check if there is a storm event at start location and if so turn back
+		if(getLocation(start).getWeather() == Weather.STORM){
+			//random chance of turning back
+			mListener.onGameEventStormBack(currX,currY);
+		}
+		// check if there is a storm event at end location and if so lose some merchandise
+		if(getLocation(end).getWeather() == Weather.STORM){
+			mListener.onGameEventStormTossed(currX,currY);
+		}
+		//  random chance of pirates
+		//mListener.onGameEventPirates(currX,currY);
+		mListener.onContinueTravel(currX,currY);
 	}
 }

@@ -180,7 +180,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	}
 
 	private void startTravelScene() {
-		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame);
+		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,0,0);
 		tl.loadResourcesAndScene();
 		mEngine.setScene(tl.getScene());
 	}
@@ -341,6 +341,33 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	@Override
 	public void onGameRestart() {
 		setCurrentScene(SceneType.NEWDAY);
+	}
+
+	@Override
+	public void onContinueTravel(int currX, int currY) {
+		// TODO temporaray until i fix the event
+		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,currX,currY);
+		tl.loadResourcesAndScene();
+		mEngine.setScene(tl.getScene());
+		
+	}
+
+	@Override
+	public void onGameEventStormTossed(int currX, int currY) {
+		// TODO temporaray until i fix the event
+		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,currX,currY);
+		tl.loadResourcesAndScene();
+		mEngine.setScene(tl.getScene());
+		
+	}
+
+	@Override
+	public void onGameEventStormBack(int currX, int currY) {
+		// TODO temporaray until i fix the event
+		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,currX,currY);
+		tl.loadResourcesAndScene();
+		mEngine.setScene(tl.getScene());
+		
 	}
 
 }
