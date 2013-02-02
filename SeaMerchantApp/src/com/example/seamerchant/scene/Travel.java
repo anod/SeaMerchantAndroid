@@ -43,11 +43,10 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 	private int mLocX; 
 	private int mLocY;
 	private Boolean mEventOccured;
-	public Travel(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner, Game game,int locX,int locY) {
+	public Travel(SimpleBaseGameActivity baseActivity, SideBanner sideBanner, LowerBanner lowerBanner, Game game,int dest) {
 		super(baseActivity, sideBanner, lowerBanner);
 		mGame = game;
-		mLocX = locX;
-		mLocY = locY;
+		mDestLoc = dest;
 	}
 
 	@Override
@@ -67,7 +66,7 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 		mEgyptButton = createButtonSprite(179, 298, mLocEgyptTextureRegion,
 				Location.EGYPT, mPlayerLoc);
 					
-		if (mLocX == 0 && mLocY == 0) {
+		if (mDestLoc==0) {
 			mEventOccured = false;
 			switch (mPlayerLoc) {
 			case Location.ISRAEL:
@@ -90,7 +89,7 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 		}else{
 			mBoatSprite = new Sprite(mLocX,mLocY, mBoatTextureRegion,
 					getVertexBufferObjectManager());
-			Path path = getBoatPathPartTwo(mLocX, mLocY,mPlayerLoc); // will also set destination
+			Path path = getBoatPathPartTwo(mDestLoc,mPlayerLoc); // will also set destination
 			mBoatSprite.registerEntityModifier(new PathModifier(10, path, this));
 			mEventOccured = true;
 		}
@@ -202,57 +201,51 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 		}
 		return path;
 	}
-	private Path getBoatPathPartTwo(int sourceX, int sourceY, int from) {
+	private Path getBoatPathPartTwo(int dest, int from) {
 		Path path = null;
 		switch (from) { // need to check only one location at the moment
 		case Location.EGYPT:
-			if(sourceX == 343 && sourceY == 232){ //from EGYPT to ISRAEL
+			if(dest == Location.ISRAEL){ //from EGYPT to ISRAEL
 				path = new Path(2);
 				path
 					.to(343, 232)
 					.to(471, 217);
-				mDestLoc = Location.ISRAEL;
 			}else{ // from EGYPT to TURKEY
 				path = new Path(3);
 				path
 					.to(253, 110)
 					.to(286, 89)
 					.to(353, 59);
-				mDestLoc = Location.TURKEY;
 			}
 			break;
 		case Location.ISRAEL:
-			if(sourceX == 471 && sourceY == 73) // from ISRAEL to TURKEY
+			if(dest == Location.TURKEY) // from ISRAEL to TURKEY
 			{
 				path = new Path(3);
 				path
 				.to(471, 73)
 				.to(440, 62)
 				.to(353, 59);
-				mDestLoc = Location.TURKEY;
 			}else{ // from ISRAEL to EGYPT 
 				path = new Path(2);
 				path
 				.to(343, 232)
 				.to(215, 250);
-				mDestLoc = Location.EGYPT;
 			}
 			break;
 		case Location.TURKEY:
-			if(sourceX == 253 && sourceY == 110){// from TURKEY to EGYPT
+			if(dest == Location.EGYPT){// from TURKEY to EGYPT
 				path = new Path(3);
 				path
 					.to(253, 110)				
 					.to(233, 159)
 					.to(215, 250);
-				mDestLoc = Location.EGYPT;
 			}else{ // from TURKEY to ISRAEL
 				path = new Path(3);
 				path
 					.to(471, 73)
 					.to(471, 131)
 					.to(471, 217);
-				mDestLoc = Location.ISRAEL;
 			}
 			break;
 		default:
@@ -279,7 +272,7 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 		this.detachSelf(); // TODO: would this work?
 		mGame.travel(mPlayerLoc, mDestLoc);
 		}else{
-			mGame.randomTravelEvent(mPlayerLoc, mDestLoc, mLocX , mLocY);
+			mGame.randomTravelEvent(mPlayerLoc, mDestLoc);
 			this.detachSelf();
 		}
 	}

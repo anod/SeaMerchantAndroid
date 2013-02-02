@@ -29,6 +29,7 @@ import com.example.seamerchant.scene.Sell;
 import com.example.seamerchant.scene.Sell.OnSellItemListener;
 import com.example.seamerchant.scene.SideBanner;
 import com.example.seamerchant.scene.Travel;
+import com.example.seamerchant.scene.TurnBack;
 import com.example.seamerchant.scene.Weather;
 import com.example.seamerchant.scene.Welcome;
 
@@ -40,6 +41,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	protected SideBanner mSideBanner;
 	protected LowerBanner mLowerBanner;
 	private Game mGame;
+	private int mContinueTravelDest;
 
 	public enum SceneType
 	{
@@ -56,7 +58,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		REST,
 		TRAVEL,
 		HIGHSCORE,
-		ENDGAME
+		ENDGAME, TURNBACK
 	}
 
 	public SceneManager(Game game, MainActivity baseActivity) {
@@ -127,11 +129,28 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		case ENDGAME:
 			startEndGameScene();
 			break;
+		case TURNBACK:
+			startTurnBackScene();
 		default:
 			break;
 		}
 	}
 
+
+	private void startTurnBackScene() {
+		final TurnBack tb = new TurnBack(mMainActivity, mSideBanner, mLowerBanner, mContinueTravelDest, mGame.getPlayer().getLocation());
+		tb.loadResourcesAndScene();
+		mEngine.setScene(tb.getScene());
+		tb.setOnActionDown(new OnActionDownListener() {
+			@Override
+			public void onAcionDown(Base base) {
+				tb.detachAndUnload();
+				final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,mContinueTravelDest);
+				tl.loadResourcesAndScene();
+				mEngine.setScene(tl.getScene());
+			}
+		});
+	}
 
 	private void startEndGameScene() {
 		final ArrayList<Scores> highScores = ScoreHandler.getScoreFileContents(mMainActivity.getApplicationContext());
@@ -180,7 +199,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	}
 
 	private void startTravelScene() {
-		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,0,0);
+		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,0);
 		tl.loadResourcesAndScene();
 		mEngine.setScene(tl.getScene());
 	}
@@ -344,30 +363,34 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 	}
 
 	@Override
-	public void onContinueTravel(int currX, int currY) {
+	public void onContinueTravel(int dest) {
 		// TODO temporaray until i fix the event
-		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,currX,currY);
+		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,dest);
 		tl.loadResourcesAndScene();
 		mEngine.setScene(tl.getScene());
 		
 	}
 
 	@Override
-	public void onGameEventStormTossed(int currX, int currY) {
+	public void onGameEventStormTossed(int dest) {
 		// TODO temporaray until i fix the event
-		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,currX,currY);
+		mContinueTravelDest = dest;
+		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,dest);
 		tl.loadResourcesAndScene();
 		mEngine.setScene(tl.getScene());
 		
 	}
 
 	@Override
-	public void onGameEventStormBack(int currX, int currY) {
-		// TODO temporaray until i fix the event
-		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,currX,currY);
-		tl.loadResourcesAndScene();
-		mEngine.setScene(tl.getScene());
-		
+	public void onGameEventStormBack(int dest) {
+		mContinueTravelDest = dest;
+		setCurrentScene(SceneType.TURNBACK);
+	}
+
+	@Override
+	public void onGameEventPirates(int dest) {
+		// TODO Auto-generated method stub
+		mContinueTravelDest = dest;
 	}
 
 }
