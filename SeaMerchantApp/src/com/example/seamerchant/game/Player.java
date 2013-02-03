@@ -1,5 +1,7 @@
 package com.example.seamerchant.game;
 
+import java.util.Random;
+
 public class Player {
 	private static final int DEFAULT_GUARD = 0;
 	private static final int DEFAULT_MONEY = 5000;
@@ -100,6 +102,17 @@ public class Player {
 
 	public void increaseMoney(int cost) {
 		this.money += cost;
+	}
+
+	public Item getItemFromStorage() {
+		Random rand = new Random();
+		while(hasGoods())
+		{
+			Item i = getItem(rand.nextInt(3));
+			if(i.getCount() > 0)
+				return i;
+		}
+		return null;
 	}
 	
 	

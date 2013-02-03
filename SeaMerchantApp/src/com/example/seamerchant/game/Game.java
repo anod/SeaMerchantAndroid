@@ -221,4 +221,11 @@ public class Game {
 		}*/
 		mListener.onContinueTravel(end);
 	}
+
+	public int itemLost(int type,int maxCount) {
+		Random rand = new Random();
+		int decCount = rand.nextInt(maxCount-2)+1;
+		mPlayer.getItem(type).reduceCount(decCount);
+		return decCount;
+	}
 }

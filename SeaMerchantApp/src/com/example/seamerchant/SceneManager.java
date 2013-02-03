@@ -3,6 +3,8 @@ package com.example.seamerchant;
 import java.util.ArrayList;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.TouchEvent;
@@ -28,6 +30,7 @@ import com.example.seamerchant.scene.Rest;
 import com.example.seamerchant.scene.Sell;
 import com.example.seamerchant.scene.Sell.OnSellItemListener;
 import com.example.seamerchant.scene.SideBanner;
+import com.example.seamerchant.scene.StormToss;
 import com.example.seamerchant.scene.Travel;
 import com.example.seamerchant.scene.TurnBack;
 import com.example.seamerchant.scene.Weather;
@@ -138,10 +141,18 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 
 	private void startStormScene() {
-		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,mContinueTravelDest);
-		tl.loadResourcesAndScene();
-		mEngine.setScene(tl.getScene());
-		
+		final StormToss st = new StormToss(mMainActivity, mSideBanner, mLowerBanner,mGame);
+		st.loadResourcesAndScene();
+		mEngine.setScene(st.getScene());
+		st.setOnActionDown(new OnActionDownListener() {
+			@Override
+			public void onAcionDown(Base base) {
+				st.detachAndUnload();
+				final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,mContinueTravelDest);
+				tl.loadResourcesAndScene();
+				mEngine.setScene(tl.getScene());
+			}
+		});
 	}
 
 	private void startTurnBackScene() {
