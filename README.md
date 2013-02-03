@@ -1,7 +1,6 @@
 ## SeaMerchant Game for android 
 
-This is a port of and old game (from 1989 by the center for educational technologies israel)
-created for Cellular applications course in Afeka College by Alex Gavrishev and Eran Zimbler
+Port of "סוחר הים" to Android for Mobile Applications course @ Afeka College Of Engineering
 
 ## Prerequisites
 
