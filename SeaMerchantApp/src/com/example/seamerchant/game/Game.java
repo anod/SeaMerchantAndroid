@@ -162,7 +162,7 @@ public class Game {
 	{
 		int cost = item.getPrice() * count;
 		Item playerItem = mPlayer.getItem(item.getType());
-		item.increaseCount(count);
+		//item.increaseCount(count);
 		playerItem.reduceCount(count);
 		// Basically i can simply use reduce money with negative values.
 		mPlayer.increaseMoney(cost);

@@ -382,7 +382,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 	@Override
 	public void onContinueTravel(int dest) {
-		// TODO temporaray until i fix the event
+		// TODO temporary until i fix the event
 		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,dest);
 		tl.loadResourcesAndScene();
 		mEngine.setScene(tl.getScene());
@@ -403,7 +403,7 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 	@Override
 	public void onGameEventPirates(int dest) {
-		// TODO Future addtion pirate attack
+		// TODO Future addition pirate attack
 		mContinueTravelDest = dest;
 		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,dest);
 		tl.loadResourcesAndScene();
