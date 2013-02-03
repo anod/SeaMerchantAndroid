@@ -16,10 +16,6 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.modifier.IModifier;
-import org.andengine.util.modifier.IModifier.IModifierListener;
-
-import android.R.bool;
-
 import com.example.seamerchant.andengine.AEUtils;
 import com.example.seamerchant.game.Game;
 import com.example.seamerchant.game.Location;
@@ -37,9 +33,9 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 	private Game mGame;
 	private int mPlayerLoc;
 	private int mDestLoc;
-	private ButtonSprite mIsraelButton;
-	private ButtonSprite mTurkeyButton;
-	private ButtonSprite mEgyptButton;
+	//private ButtonSprite mIsraelButton;
+	//private ButtonSprite mTurkeyButton;
+	//private ButtonSprite mEgyptButton;
 	private int mLocX; 
 	private int mLocY;
 	private Boolean mEventOccured;
@@ -59,11 +55,14 @@ public class Travel extends Main implements OnClickListener, IEntityModifierList
 		mPlayerLoc = mGame.getPlayer().getLocation();
 
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		mIsraelButton = createButtonSprite(516, 253, mLocIsraelTextureRegion,
+		//mIsraelButton = 
+		createButtonSprite(516, 253, mLocIsraelTextureRegion,
 				Location.ISRAEL, mPlayerLoc);
-		mTurkeyButton = createButtonSprite(344, 4, mLocTurkeyTextureRegion,
+		//mTurkeyButton = 
+		createButtonSprite(344, 4, mLocTurkeyTextureRegion,
 				Location.TURKEY, mPlayerLoc);
-		mEgyptButton = createButtonSprite(179, 298, mLocEgyptTextureRegion,
+		//mEgyptButton = 
+		createButtonSprite(179, 298, mLocEgyptTextureRegion,
 				Location.EGYPT, mPlayerLoc);
 					
 		if (mDestLoc==0) {

@@ -61,5 +61,8 @@ public class Location {
 	public void setWeather(Weather weather) {
 		this.weather = weather;
 	}
+	public int getType(){
+		return mType;
+	}
 
 }

@@ -10,13 +10,13 @@ import com.example.seamerchant.game.Game;
 
 public class HighScore extends FullScreen {
 
-	private Game mGame;
+	//private Game mGame;
 	private TextureRegion mBgTextureRegion;
 	private Scene mHighScore;
 	
 	public HighScore(SimpleBaseGameActivity baseActivity, Game game) {
 		super(baseActivity);
-		mGame = game;
+		//mGame = game;
 	}
 
 	@Override

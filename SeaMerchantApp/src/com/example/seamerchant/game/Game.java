@@ -214,6 +214,7 @@ public class Game {
 		}
 		/*
 		//  random chance of pirates
+		// TODO Future addition pirate attack
 		if(false){
 		mListener.onGameEventPirates(end);
 		return;

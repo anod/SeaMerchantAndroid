@@ -129,11 +129,20 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 			break;
 		case TURNBACK:
 			startTurnBackScene();
+		case STORM:
+			startStormScene();
 		default:
 			break;
 		}
 	}
 
+
+	private void startStormScene() {
+		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,mContinueTravelDest);
+		tl.loadResourcesAndScene();
+		mEngine.setScene(tl.getScene());
+		
+	}
 
 	private void startTurnBackScene() {
 		final TurnBack tb = new TurnBack(mMainActivity, mSideBanner, mLowerBanner, mContinueTravelDest, mGame.getPlayer().getLocation());
@@ -152,10 +161,10 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 	private void startEndGameScene() {
 		final ArrayList<Scores> highScores = ScoreHandler.getScoreFileContents(mMainActivity.getApplicationContext());
-		int lowest = 0;
-		if (!highScores.isEmpty()) {
-			lowest = highScores.get(highScores.size()-1).getScore();
-		}
+//		int lowest = 0;
+//		if (!highScores.isEmpty()) {
+//			lowest = highScores.get(highScores.size()-1).getScore();
+//		}
 		final EndGame eg = new EndGame(mMainActivity, mGame.getPlayer().getMoney(),highScores);
 		eg.loadResourcesAndScene();
 		mEngine.setScene(eg.getScene());
@@ -371,12 +380,8 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 	@Override
 	public void onGameEventStormTossed(int dest) {
-		// TODO temporaray until i fix the event
 		mContinueTravelDest = dest;
-		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,dest);
-		tl.loadResourcesAndScene();
-		mEngine.setScene(tl.getScene());
-		
+		setCurrentScene(SceneType.STORM);
 	}
 
 	@Override
@@ -387,8 +392,11 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 
 	@Override
 	public void onGameEventPirates(int dest) {
-		// TODO Auto-generated method stub
+		// TODO Future addtion pirate attack
 		mContinueTravelDest = dest;
+		final Travel tl = new Travel(mMainActivity, mSideBanner, mLowerBanner, mGame,dest);
+		tl.loadResourcesAndScene();
+		mEngine.setScene(tl.getScene());
 	}
 
 }
