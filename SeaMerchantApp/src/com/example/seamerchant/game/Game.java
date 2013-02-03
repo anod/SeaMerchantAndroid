@@ -206,15 +206,18 @@ public class Game {
 			}
 		}
 		// check if there is a storm event at end location and if so lose some merchandise
-		if(getLocation(end).getWeather() == Weather.STORM){
+		if(getLocation(end).getWeather() == Weather.STORM && mPlayer.hasGoods()){
+			if(rand.nextDouble() < 0.3333333){
 			mListener.onGameEventStormTossed(end);
 			return;
+			}
 		}
+		/*
 		//  random chance of pirates
 		if(false){
 		mListener.onGameEventPirates(end);
 		return;
-		}
+		}*/
 		mListener.onContinueTravel(end);
 	}
 }

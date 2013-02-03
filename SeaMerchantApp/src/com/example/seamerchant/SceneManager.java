@@ -52,13 +52,14 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		OPTIONS,
 		SELL,
 		BUY,
-		PIRATES,
-		PIRATERESULT,
-		NEXTDAY,
+		//PIRATES,
+		//PIRATERESULT,
 		REST,
 		TRAVEL,
 		HIGHSCORE,
-		ENDGAME, TURNBACK
+		ENDGAME, 
+		TURNBACK,
+		STORM
 	}
 
 	public SceneManager(Game game, MainActivity baseActivity) {
@@ -114,9 +115,6 @@ public class SceneManager implements OnOptionClickListener, OnGameChangeListener
 		case SELL:
 			startSellScene();
 			break;
-		//case NEXTDAY:
-			//startNextDayScene();
-		//	break;
 		case REST:
 			startRestScene();
 			break;
